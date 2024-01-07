@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="true">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/contentSearchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+
+            <com.google.android.material.search.SearchBar
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/hint_search"
+                android:id="@+id/searchBar"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <HorizontalScrollView
+            android:id="@+id/contentChips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbarThumbHorizontal="@null"
+            android:scrollbarTrackHorizontal="@null">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    app:singleLine="true"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipBy0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        app:chipIconTint="?colorControlNormal"
+                        android:text="@string/text_user_apps"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipBy1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        app:chipIconTint="?colorControlNormal"
+                        android:text="@string/text_system_apps"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipBy2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipIconTint="?colorControlNormal"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:text="@string/text_google_play"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipBy3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipIconTint="?colorControlNormal"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:text="@string/text_all_apps"/>
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </HorizontalScrollView>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:scrollbars="none"
+        android:alpha="0"
+        android:id="@+id/recyclerView"/>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="64dp"
+        android:indeterminate="true"
+        app:trackCornerRadius="100dp"
+        android:alpha="0"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

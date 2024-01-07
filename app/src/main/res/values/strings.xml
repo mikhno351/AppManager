@@ -1,0 +1,81 @@
+<resources>
+    <string name="app_name" translatable="false">App Manager</string>
+
+    <string name="text_unknown_app">Oops</string>
+    <string name="text_aus">App Usage Service</string>
+    <string name="text_auc">App Usage Channel</string>
+    <string name="text_user_applications_that_can_run" translatable="false">User applications that can be run</string>
+    <string name="text_user_system_applications_that_can_run" translatable="false">User and system applications that can be run</string>
+    <string name="text_package_usage_stats">Stat used apps</string>
+    <string name="text_used_app">Used app %s</string>
+    <string name="text_user_apps">User apps</string>
+    <string name="text_system_apps">System apps</string>
+    <string name="text_all_apps">All apps</string>
+    <string name="text_google_play" translatable="false">Google Play</string>
+    <string name="text_extracting_apk">Extracting APK…</string>
+    <string name="text_extracting_apk_v2">Extracting APK "%s"…</string>
+    <string name="text_share_apk">Share APK</string>
+    <string name="text_app_name">App Name</string>
+    <string name="text_app_package">App Package</string>
+    <string name="text_app_version">Version</string>
+    <string name="text_app_version_code">Version Code</string>
+    <string name="text_app_install_time">Install Time</string>
+    <string name="text_app_update_time">Update Time</string>
+    <string name="text_app_provenance">Provenance</string>
+    <string name="text_nothing">There\'s nothing here</string>
+    <string name="text_min_sdk">Minimal OS</string>
+    <string name="text_target_sdk">Target OS</string>
+    <string name="text_executed_apk">Executed APK</string>
+    <string name="text_copy_to_clipboard">Copy to clipboard</string>
+    <string name="text_source_dir">Source directory</string>
+    <string name="text_pub_source_dir">Public source directory</string>
+    <string name="text_native_library_dir">Native library directory</string>
+    <string name="text_app_component_factory">Component</string>
+    <string name="text_compile_sdk_version">Compile SDK Version</string>
+    <string name="text_backup_agent">Backup Agent</string>
+
+    <string name="provenance_user">Installer</string>
+    <string name="provenance_system">System</string>
+    <string name="provenance_google_play" translatable="false">Google Play</string>
+
+    <string name="channel_app_usage">App Usage Service</string>
+
+    <string name="message_unknown_app">It looks like you are trying to open a non-existent application.</string>
+    <string name="message_aus">Monitoring app usage…</string>
+    <string name="message_tap_target_search_bar">Search for apps quickly and easily</string>
+    <string name="message_tap_target_filter">A simple application list filter, select the list you need for convenience</string>
+    <string name="message_used_app">Time in focus: %s</string>
+    <string name="message_tab_basic">Here you can see all the basic information about the app</string>
+    <string name="message_tab_details">Here you can find more detailed information about the application, for example: target API version, minimum API version</string>
+    <string name="message_app_no_require_perms">The application does not require special permissions</string>
+    <string name="message_no_detail_info_permission">There is no detailed information about the \"%s\" permission</string>
+
+    <string name="toast_app_not_deleted">The application has not been deleted.</string>
+    <string name="toast_unknown_data_deleted">We were unable to process the deletion request inside the application.</string>
+    <string name="toast_app_deleted">Application "%s" has been successfully deleted.</string>
+    <string name="toast_package_usage_stats">By granting this permission, the app will be able to track your activity in other apps. Click "Provide" to allow tracking statistics. Click "Hide" to hide this window and not show it anymore. Click "Cancel" to hide this dialog box once.</string>
+    <string name="toast_extracting_apk_background">The extraction of the APK file will continue in the background…</string>
+    <string name="text_copied_to_clipboard">Saved to the clipboard</string>
+
+    <string name="action_filter">Filters</string>
+    <string name="action_provide">Provide</string>
+    <string name="action_stop">Stop</string>
+    <string name="action_close">Close</string>
+    <string name="action_hide">Hide</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_open_app">Open</string>
+    <string name="action_delete_app">Delete</string>
+    <string name="action_settings_app">Settings</string>
+    <string name="action_stop_app">Stop</string>
+    <string name="action_share_app">Share</string>
+    <string name="action_details_app">Details</string>
+    <string name="action_permissions_app">Permissions</string>
+    <string name="action_manifest_app" translatable="false">Manifest</string>
+
+    <string name="tab_details">Details</string>
+    <string name="tab_basic">Basic</string>
+
+    <string name="hint_search">Search apps</string>
+
+    <string name="contentDescription_app_icon">App icon</string>
+</resources>
