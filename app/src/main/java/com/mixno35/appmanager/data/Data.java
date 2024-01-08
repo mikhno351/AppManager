@@ -1,6 +1,7 @@
 package com.mixno35.appmanager.data;
 
 import android.annotation.SuppressLint;
+import android.app.AppOpsManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -8,18 +9,27 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.text.format.DateFormat;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import com.mixno35.appmanager.BuildConfig;
 import com.mixno35.appmanager.R;
+import com.mixno35.appmanager.model.AndroidModel;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +42,10 @@ public class Data {
     public static String PREFS_KEY_TAP_TARGET_DETAILS = "tap_target_details";
     public static String PREFS_KEY_LIST_FILTER = "list_filter";
     public static String PREFS_KEY_APP_USE_PERMISSION = "app_use_perms_hide";
+
+    static String GOOGLE_PLAY_APP_LINK = "https://play.google.com/store/apps/details?id=%20";
+
+    public static ArrayList<AndroidModel> ANDROID_VERSIONS = new ArrayList<>();
 
     @SuppressLint("DefaultLocale")
     public static String formatMillisToDHMS(long millis) {
@@ -47,6 +61,45 @@ public class Data {
         if (seconds > 0) result.append(seconds).append("с.");
 
         return result.toString();
+    }
+
+    public static boolean hasUsageStatsPermission(@NonNull Context context) {
+        AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), context.getPackageName());
+        return mode == AppOpsManager.MODE_ALLOWED;
+    }
+
+    public static String readInputStream(InputStream inputStream) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return stringBuilder.toString();
+    }
+
+    public static void requestUsageStatsPermission(@NonNull ActivityResultLauncher<Intent> usageStatsLauncher) {
+        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+        usageStatsLauncher.launch(intent);
+    }
+
+    @SuppressLint("DefaultLocale")
+    public static String convertBytes(long bytes) {
+        if (bytes < 1024) return bytes + " B";
+
+        int exp = (int) (Math.log(bytes) / Math.log(1024));
+        char unit = "KMGTPE".charAt(exp - 1);
+        return String.format("%.1f %sB", bytes / Math.pow(1024, exp), unit);
     }
 
     public static String capitalizeFirstLetter(String input) {
@@ -65,6 +118,14 @@ public class Data {
         clipboardManager.setPrimaryClip(clipData);
 
         Toast.makeText(context, context.getString(R.string.text_copied_to_clipboard), Toast.LENGTH_SHORT).show();
+    }
+
+    public static void openInGooglePlay(@NonNull Context context, @NonNull String packageName) {
+        try {
+            context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(GOOGLE_PLAY_APP_LINK.replace("%20", packageName))));
+        } catch (Exception e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static void shareFile(@NonNull Context context, @NonNull File file) {

@@ -1,5 +1,7 @@
 package com.mixno35.appmanager.data;
 
+import android.app.usage.StorageStats;
+import android.app.usage.StorageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -138,6 +140,27 @@ public class AppData {
         }
 
         return list;
+    }
+
+    public ArrayList<Long> getAppSize(@NonNull Context context, @NonNull String packageName) {
+        ArrayList<Long> arrayList = new ArrayList<>();
+
+        final StorageStatsManager storageStatsManager = (StorageStatsManager) context.getSystemService(Context.STORAGE_STATS_SERVICE);
+        try {
+            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(packageName, 0);
+            StorageStats storageStats = storageStatsManager.queryStatsForUid(applicationInfo.storageUuid, applicationInfo.uid);
+            arrayList.add(storageStats.getCacheBytes());
+            arrayList.add(storageStats.getDataBytes());
+            arrayList.add(storageStats.getAppBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            arrayList.add(((long) 0));
+            arrayList.add(((long) 0));
+            arrayList.add(((long) 0));
+        }
+
+        return arrayList;
     }
 
     public ArrayList<AppModel> get_arrayAppsAll(@NonNull Context context, @NonNull PackageManager packageManager) {

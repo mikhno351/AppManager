@@ -72,11 +72,11 @@ public class DetailsFragment extends Fragment {
             String app_publicSourceDir = Objects.requireNonNull(packageInfo.applicationInfo.publicSourceDir);
 
             try {
-                list.add(new DetailInfoModel(getString(R.string.text_min_sdk), AndroidUtils.getName(packageInfo.applicationInfo.minSdkVersion, "%a %v %c (%s)"), 0, null, null));
+                list.add(new DetailInfoModel(getString(R.string.text_min_sdk), Objects.requireNonNull(AndroidUtils.getName(packageInfo.applicationInfo.minSdkVersion, "%a %v %c (%s)")), 0, null, null));
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
-                list.add(new DetailInfoModel(getString(R.string.text_target_sdk), AndroidUtils.getName(packageInfo.applicationInfo.targetSdkVersion, "%a %v %c (%s)"), 0, null, null));
+                list.add(new DetailInfoModel(getString(R.string.text_target_sdk), Objects.requireNonNull(AndroidUtils.getName(packageInfo.applicationInfo.targetSdkVersion, "%a %v %c (%s)")), 0, null, null));
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
@@ -92,7 +92,7 @@ public class DetailsFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
-                list.add(new DetailInfoModel(getString(R.string.text_native_library_dir), packageInfo.applicationInfo.nativeLibraryDir, 0, null, null));
+                list.add(new DetailInfoModel(getString(R.string.text_native_library_dir), Objects.requireNonNull(packageInfo.applicationInfo.nativeLibraryDir), 0, null, null));
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
@@ -100,7 +100,7 @@ public class DetailsFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
-                list.add(new DetailInfoModel("UID", String.valueOf(packageInfo.applicationInfo.uid), 0, null, null));
+                list.add(new DetailInfoModel("UID", Objects.requireNonNull(String.valueOf(packageInfo.applicationInfo.uid)), 0, null, null));
             } catch (Exception e) {
                 e.printStackTrace();
             }

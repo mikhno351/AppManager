@@ -46,14 +46,31 @@ public class PermissionUtils {
     }
 
     public static int getIcon(@NonNull String permission) {
-        if (permission.contains("com.android.vending.BILLING")) return R.drawable.outline_paid_24;
-        else if (permission.contains("android.permission.ACCESS_WIFI_STATE")) return R.drawable.baseline_network_wifi_3_bar_24;
-        else if (permission.contains("android.permission.INTERNET")) return R.drawable.baseline_network_cell_24;
-        else if (permission.contains("android.permission.WAKE_LOCK")) return R.drawable.outline_lock_24;
-        else if (permission.contains("android.permission.CHANGE_WIFI_STATE")) return R.drawable.baseline_network_wifi_3_bar_24;
-        else if (permission.contains("android.permission.ACCESS_NETWORK_STATE")) return R.drawable.baseline_network_wifi_3_bar_24;
-        else if (permission.contains("android.permission.CAMERA")) return R.drawable.outline_camera_alt_24;
-        else if (permission.contains("com.google.android.c2dm.permission.RECEIVE")) return R.drawable.outline_cloud_download_24;
+        if      (permission.equalsIgnoreCase("com.android.vending.BILLING")) return R.drawable.outline_paid_24;
+        else if (permission.equalsIgnoreCase("android.permission.INTERNET")) return R.drawable.baseline_network_cell_24;
+        else if (permission.equalsIgnoreCase("android.permission.WAKE_LOCK")) return R.drawable.outline_lock_24;
+        else if (permission.equalsIgnoreCase("android.permission.CAMERA")) return R.drawable.outline_camera_alt_24;
+        else if (permission.equalsIgnoreCase("android.permission.VIBRATE")) return R.drawable.baseline_vibration_24;
+        else if (permission.equalsIgnoreCase("android.permission.USE_FINGERPRINT")) return R.drawable.baseline_fingerprint_24;
+        else if (permission.equalsIgnoreCase("android.permission.QUERY_ALL_PACKAGE")) return R.drawable.baseline_android_24;
+        else if (permission.equalsIgnoreCase("android.permission.READ_MEDIA_AUDIO")) return R.drawable.baseline_music_note_24;
+        else if (permission.equalsIgnoreCase("android.permission.READ_MEDIA_IMAGES")) return R.drawable.outline_image_24;
+        else if (permission.equalsIgnoreCase("android.permission.READ_MEDIA_VIDEO")) return R.drawable.outline_subscriptions_24;
+        else if (permission.equalsIgnoreCase("android.permission.RECORD_AUDIO")) return R.drawable.outline_mic_24;
+        else if (permission.equalsIgnoreCase("android.permission.USE_BIOMETRIC")) return R.drawable.baseline_accessibility_24;
+        else if (permission.equalsIgnoreCase("android.permission.NFC")) return R.drawable.baseline_nfc_24;
+        else if (permission.contains("NOTIFICATION")) return R.drawable.outline_notifications_active_24;
+        else if (permission.contains("ACCOUNTS")) return R.drawable.outline_person_24;
+        else if (permission.contains("LOCATION")) return R.drawable.outline_place_24;
+        else if (permission.contains("EXTERNAL_STORAGE")) return R.drawable.outline_folder_24;
+        else if (permission.contains("BLUETOOTH")) return R.drawable.baseline_bluetooth_24;
+        else if (permission.contains("PACKAGES")) return R.drawable.baseline_android_24;
+        else if (permission.contains("CONTACTS")) return R.drawable.outline_contacts_24;
+        else if (permission.contains("WIFI")) return R.drawable.baseline_network_wifi_3_bar_24;
+        else if (permission.contains("NETWORK")) return R.drawable.baseline_network_wifi_3_bar_24;
+        else if (permission.equalsIgnoreCase("com.google.android.c2dm.permission.RECEIVE")) return R.drawable.outline_cloud_download_24;
+        else if (permission.equalsIgnoreCase("com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE")) return R.drawable.baseline_shop_24;
+        else if (permission.equalsIgnoreCase("com.android.launcher.permission.INSTALL_SHORTCUT")) return R.drawable.baseline_open_in_new_24;
         else return R.drawable.baseline_security_24;
     }
 }

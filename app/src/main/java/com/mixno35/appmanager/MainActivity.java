@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,7 +21,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -39,15 +37,19 @@ import com.mixno35.appmanager.adapter.AppAdapter;
 import com.mixno35.appmanager.data.AppData;
 import com.mixno35.appmanager.data.Data;
 import com.mixno35.appmanager.dialog.AppDetailDialog;
+import com.mixno35.appmanager.model.AndroidModel;
 import com.mixno35.appmanager.model.AppModel;
 import com.mixno35.appmanager.service.AppUsageService;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
+
+import org.json.JSONArray;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -111,12 +113,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (!hasUsageStatsPermission() && !prefs.getBoolean(Data.PREFS_KEY_APP_USE_PERMISSION, false)) {
+        if (!Data.hasUsageStatsPermission(this) && !prefs.getBoolean(Data.PREFS_KEY_APP_USE_PERMISSION, false)) {
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
             builder.setTitle(getString(R.string.text_package_usage_stats));
             builder.setMessage(getString(R.string.toast_package_usage_stats));
             builder.setCancelable(false);
-            builder.setPositiveButton(getString(R.string.action_provide), (dialog, which) -> requestUsageStatsPermission());
+            builder.setPositiveButton(getString(R.string.action_provide), (dialog, which) -> Data.requestUsageStatsPermission(usageStatsLauncher));
             builder.setNegativeButton(getString(R.string.action_hide), (dialog, which) -> prefs.edit().putBoolean(Data.PREFS_KEY_APP_USE_PERMISSION, true).apply());
             builder.setNeutralButton(getString(R.string.action_cancel), (dialog, which) -> dialog.dismiss());
 
@@ -221,20 +223,28 @@ public class MainActivity extends AppCompatActivity {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK)
-                        if (hasUsageStatsPermission()) startAppUsageService();
+                        if (Data.hasUsageStatsPermission(MainActivity.this)) startAppUsageService();
                 });
+
+        Executors.newSingleThreadExecutor().submit(() -> {
+            try {
+                JSONArray jsonArray = new JSONArray(Data.readInputStream(getResources().openRawResource(R.raw.android_versions)));
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    String version = Objects.requireNonNull(jsonArray.getJSONArray(i).getString(0));
+                    String codename = Objects.requireNonNull(jsonArray.getJSONArray(i).getString(1));
+
+                    version = version.trim().isEmpty() ? "0.0" : version;
+                    codename = codename.trim().isEmpty() ? "-" : codename;
+
+                    Data.ANDROID_VERSIONS.add(new AndroidModel(version, codename));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
-    private boolean hasUsageStatsPermission() {
-        AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), getPackageName());
-        return mode == AppOpsManager.MODE_ALLOWED;
-    }
 
-    private void requestUsageStatsPermission() {
-        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-        usageStatsLauncher.launch(intent);
-    }
 
     private void startAppUsageService() {
         startService(new Intent(this, AppUsageService.class));

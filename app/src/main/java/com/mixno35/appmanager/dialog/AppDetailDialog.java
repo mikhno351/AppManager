@@ -25,6 +25,7 @@ import com.mixno35.appmanager.R;
 import com.mixno35.appmanager.adapter.MenuAdapter;
 import com.mixno35.appmanager.data.ApkExtractor;
 import com.mixno35.appmanager.data.AppData;
+import com.mixno35.appmanager.data.Data;
 import com.mixno35.appmanager.decoration.GridSpacingItemDecoration;
 import com.mixno35.appmanager.model.MenuModel;
 
@@ -81,6 +82,7 @@ public class AppDetailDialog {
                 }));
             }
             list.add(new MenuModel(context.getString(R.string.action_share_app), R.drawable.baseline_share_24, v -> new ApkExtractor(context).shareApkFile(packageManager, packageName)));
+            list.add(new MenuModel(context.getString(R.string.action_find_in_gp_app), R.drawable.baseline_shop_24, v -> Data.openInGooglePlay(context, packageName)));
             list.add(new MenuModel(context.getString(R.string.action_details_app), R.drawable.outline_info_24, v -> {
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(((Activity) context), iconImageView, "sharedImage");
                 context.startActivity(new Intent(context, DetailsActivity.class).putExtra("packageName", packageName), options.toBundle());

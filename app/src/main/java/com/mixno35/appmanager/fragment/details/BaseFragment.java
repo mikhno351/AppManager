@@ -1,6 +1,7 @@
 package com.mixno35.appmanager.fragment.details;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -19,6 +23,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textview.MaterialTextView;
 import com.mixno35.appmanager.ManifestActivity;
 import com.mixno35.appmanager.R;
 import com.mixno35.appmanager.adapter.DetailInfoAdapter;
@@ -38,6 +44,9 @@ public class BaseFragment extends Fragment {
     String packageName = "";
 
     RecyclerView recyclerView, recyclerViewMenu;
+    LinearLayoutCompat containerUsageStatsSize, containerSize;
+    MaterialButton buttonProvide;
+    MaterialTextView textSizeApp, textSizeData, textSizeCache;
 
     SharedPreferences prefs;
     PackageManager packageManager;
@@ -47,6 +56,8 @@ public class BaseFragment extends Fragment {
 
     ArrayList<DetailInfoModel> list = new ArrayList<>();
     ArrayList<MenuModel> list_menu = new ArrayList<>();
+
+    ActivityResultLauncher<Intent> usageStatsLauncher;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -65,6 +76,12 @@ public class BaseFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerViewMenu = view.findViewById(R.id.recyclerViewMenu);
+        containerUsageStatsSize = view.findViewById(R.id.containerUsageStatsSize);
+        containerSize = view.findViewById(R.id.containerSize);
+        buttonProvide = view.findViewById(R.id.buttonProvide);
+        textSizeApp = view.findViewById(R.id.textSizeApp);
+        textSizeData = view.findViewById(R.id.textSizeData);
+        textSizeCache = view.findViewById(R.id.textSizeCache);
 
         if (recyclerView != null) recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         if (recyclerViewMenu != null) {
@@ -75,6 +92,8 @@ public class BaseFragment extends Fragment {
         adapter = new DetailInfoAdapter(list, requireActivity());
         adapter_menu = new MenuAdapter(list_menu, requireActivity());
 
+        buttonProvide.setOnClickListener(v -> Data.requestUsageStatsPermission(usageStatsLauncher));
+
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(Objects.requireNonNull(packageName), 0);
 
@@ -84,16 +103,16 @@ public class BaseFragment extends Fragment {
             list_menu.add(new MenuModel(getString(R.string.action_permissions_app), R.drawable.baseline_security_24, v -> new PermissionsDialog(requireActivity(), packageManager, packageName)));
             list_menu.add(new MenuModel(getString(R.string.action_manifest_app), R.drawable.baseline_android_24, v -> startActivity(new Intent(requireActivity(), ManifestActivity.class).putExtra("packageName", packageName))));
 
-            String app_name = packageInfo.applicationInfo.loadLabel(packageManager).toString();
-            String app_package = packageInfo.applicationInfo.packageName;
+            String app_name = Objects.requireNonNull(packageInfo.applicationInfo.loadLabel(packageManager).toString());
+            String app_package = Objects.requireNonNull(packageInfo.applicationInfo.packageName);
 
             list.add(new DetailInfoModel(getString(R.string.text_app_name), app_name, R.drawable.baseline_content_copy_24, v -> Data.copyToClipboard(requireActivity(), app_name), requireActivity().getString(R.string.text_copy_to_clipboard)));
             list.add(new DetailInfoModel(getString(R.string.text_app_package), app_package, R.drawable.baseline_content_copy_24, v -> Data.copyToClipboard(requireActivity(), app_package), requireActivity().getString(R.string.text_copy_to_clipboard)));
-            list.add(new DetailInfoModel(getString(R.string.text_app_version), packageInfo.versionName, 0, null, null));
-            list.add(new DetailInfoModel(getString(R.string.text_app_version_code), String.valueOf(packageInfo.versionCode), 0, null, null));
-            list.add(new DetailInfoModel(getString(R.string.text_app_install_time), Data.convertTimestampToDateTime(requireActivity(), packageInfo.firstInstallTime), 0, null, null));
-            list.add(new DetailInfoModel(getString(R.string.text_app_update_time), Data.convertTimestampToDateTime(requireActivity(), packageInfo.lastUpdateTime), 0, null, null));
-            list.add(new DetailInfoModel(getString(R.string.text_app_provenance), new AppData().getProvenance(requireActivity(), packageManager, packageName), 0, null, null));
+            list.add(new DetailInfoModel(getString(R.string.text_app_version), Objects.requireNonNull(packageInfo.versionName), 0, null, null));
+            list.add(new DetailInfoModel(getString(R.string.text_app_version_code), Objects.requireNonNull(String.valueOf(packageInfo.versionCode)), 0, null, null));
+            list.add(new DetailInfoModel(getString(R.string.text_app_install_time), Objects.requireNonNull(Data.convertTimestampToDateTime(requireActivity(), packageInfo.firstInstallTime)), 0, null, null));
+            list.add(new DetailInfoModel(getString(R.string.text_app_update_time), Objects.requireNonNull(Data.convertTimestampToDateTime(requireActivity(), packageInfo.lastUpdateTime)), 0, null, null));
+            list.add(new DetailInfoModel(getString(R.string.text_app_provenance), Objects.requireNonNull(new AppData().getProvenance(requireActivity(), packageManager, packageName)), 0, null, null));
 
             recyclerView.setAdapter(adapter);
             recyclerViewMenu.setAdapter(adapter_menu);
@@ -108,6 +127,27 @@ public class BaseFragment extends Fragment {
             return WindowInsetsCompat.CONSUMED;
         });
 
+        usageStatsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                Data.hasUsageStatsPermission(requireActivity());
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        containerUsageStatsSize.post(() -> containerUsageStatsSize.setVisibility(Data.hasUsageStatsPermission(requireActivity()) ? View.GONE : View.VISIBLE));
+        containerSize.post(() -> containerSize.setVisibility(Data.hasUsageStatsPermission(requireActivity()) ? View.VISIBLE : View.GONE));
+
+        if (Data.hasUsageStatsPermission(requireActivity())) {
+            ArrayList<Long> appSize = new AppData().getAppSize(requireActivity(), packageName);
+
+            if (textSizeApp != null) textSizeApp.post(() -> textSizeApp.setText(Data.convertBytes(appSize.get(2))));
+            if (textSizeData != null) textSizeData.post(() -> textSizeData.setText(Data.convertBytes(appSize.get(1))));
+            if (textSizeCache != null) textSizeCache.post(() -> textSizeCache.setText(Data.convertBytes(appSize.get(0))));
+        }
     }
 }

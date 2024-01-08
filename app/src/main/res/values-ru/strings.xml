@@ -3,7 +3,7 @@
     <string name="text_unknown_app">Ой</string>
     <string name="text_aus">Служба использования приложения</string>
     <string name="text_auc">Канал использования приложения</string>
-    <string name="text_package_usage_stats">Статистика</string>
+    <string name="text_package_usage_stats">Статистика использования</string>
     <string name="text_used_app">Используется %s</string>
     <string name="text_user_apps">Пользовательские</string>
     <string name="text_system_apps">Системные</string>
@@ -18,10 +18,11 @@
     <string name="message_used_app">Время работы: %s</string>
     <string name="message_app_no_require_perms">Это приложение не требует особых разрешений</string>
     <string name="message_no_detail_info_permission">Нет подробной информации о разрешении \"%s\"</string>
+    <string name="message_package_usage_stats_size">Для просмотра размера приложений требуется разрешение</string>
     <string name="toast_app_not_deleted">Приложение не было удалено.</string>
     <string name="toast_unknown_data_deleted">Нам не удалось обработать запрос на удаление внутри приложения.</string>
     <string name="toast_app_deleted">Приложение \"%s\" было успешно удалено.</string>
-    <string name="toast_package_usage_stats">Предоставив это разрешение, приложение сможет отслеживать вашу активность в других приложениях. Нажмите \"Предоставить\", чтобы разрешить отслеживать статистику. Нажмите \"Скрыть\", чтобы скрыть это окно и больше не показывать. Нажмите \"Отмена\", чтобы единоразово скрыть это диалоговое окно.</string>
+    <string name="toast_package_usage_stats">Разрешите приложению использовать статистику других приложений. Разрешив использовать статистику, App Manager будет отслеживать активность в других приложениях.</string>
     <string name="toast_extracting_apk_background">Извлечение APK-файла будет продолжено в фоновом режиме…</string>
     <string name="action_filter">Фильтры</string>
     <string name="action_provide">Предоставить</string>
@@ -42,6 +43,7 @@
     <string name="text_app_version_code">Код версии</string>
     <string name="channel_app_usage">Используемые приложения</string>
     <string name="action_cancel">Отмена</string>
+    <string name="action_manifest_app">Манифест</string>
     <string name="tab_details">Подробно</string>
     <string name="tab_basic">Основное</string>
     <string name="message_tab_basic">Здесь вы можете ознакомиться со всей основной информацией о приложении</string>
@@ -64,4 +66,8 @@
     <string name="text_app_component_factory">Компонент</string>
     <string name="text_compile_sdk_version">Версия SDK компилятора</string>
     <string name="text_backup_agent">Агент резервного копирования</string>
+    <string name="action_find_in_gp_app">Искать в Google Play</string>
+    <string name="text_size_app">Приложение</string>
+    <string name="text_size_data">Данные</string>
+    <string name="text_size_cache">Кэш</string>
 </resources>
