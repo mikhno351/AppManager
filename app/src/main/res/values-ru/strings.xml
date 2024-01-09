@@ -60,7 +60,7 @@
     <string name="text_min_sdk">Минимальная ОС</string>
     <string name="text_target_sdk">Целевая ОС</string>
     <string name="text_executed_apk">Извлеченный APK</string>
-    <string name="text_copied_to_clipboard">Сохранено в буферм обмена</string>
+    <string name="text_copied_to_clipboard">Сохранено в буфер обмена</string>
     <string name="text_pub_source_dir">Публичный исходный каталог</string>
     <string name="text_native_library_dir">Каталог библиотек</string>
     <string name="text_app_component_factory">Компонент</string>
@@ -70,4 +70,6 @@
     <string name="text_size_app">Приложение</string>
     <string name="text_size_data">Данные</string>
     <string name="text_size_cache">Кэш</string>
+    <string name="action_class_app">Классы</string>
+    <string name="action_resources_app">Ресурсы</string>
 </resources>

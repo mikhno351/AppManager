@@ -43,7 +43,6 @@ import com.mixno35.appmanager.service.AppUsageService;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.getkeepsafe.taptargetview.TapTarget;
@@ -251,47 +250,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void updateList() {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(this::loadInstalledApps);
-    }
-
-    @SuppressLint("QueryPermissionsNeeded") void loadInstalledApps() {
-        runOnUiThread(() -> {
-            progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
-            recyclerView.post(() -> {
-                recyclerView.animate().alpha(0f).setDuration(0).start();
-                recyclerView.scrollToPosition(0);
+        Executors.newSingleThreadExecutor().submit(() -> {
+            runOnUiThread(() -> {
+                progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
+                recyclerView.post(() -> {
+                    recyclerView.animate().alpha(0f).setDuration(0).start();
+                    recyclerView.scrollToPosition(0);
+                });
+                chipGroup.post(() -> {
+                    chipGroup.setEnabled(false);
+                    chipGroup.setClickable(false);
+                });
+                LOADING_APPS = true;
             });
-            chipGroup.post(() -> {
-                chipGroup.setEnabled(false);
-                chipGroup.setClickable(false);
+
+            list.clear();
+
+            try {
+                PackageManager packageManager = getPackageManager();
+
+                if (LIST_FILTER == 0) list.addAll(new AppData().get_arrayAppsUser(getApplicationContext(), packageManager));
+                if (LIST_FILTER == 1) list.addAll(new AppData().get_arrayAppsSystem(getApplicationContext(), packageManager));
+                if (LIST_FILTER == 2) list.addAll(new AppData().get_arrayAppsGooglePlay(getApplicationContext(), packageManager));
+                if (LIST_FILTER == 3) list.addAll(new AppData().get_arrayAppsAll(getApplicationContext(), packageManager));
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            runOnUiThread(() -> {
+                Log.i("APPS", list.toString());
+                adapter.setList(list);
+                progressBar.post(() -> progressBar.animate().alpha(0f).setDuration(200).start());
+                recyclerView.post(() -> recyclerView.animate().alpha(1f).setDuration(200).start());
+                chipGroup.post(() -> {
+                    chipGroup.setEnabled(true);
+                    chipGroup.setClickable(true);
+                });
+                LOADING_APPS = false;
             });
-            LOADING_APPS = true;
-        });
-
-        list.clear();
-
-        try {
-            PackageManager packageManager = getPackageManager();
-
-            if (LIST_FILTER == 0) list.addAll(new AppData().get_arrayAppsUser(getApplicationContext(), packageManager));
-            if (LIST_FILTER == 1) list.addAll(new AppData().get_arrayAppsSystem(getApplicationContext(), packageManager));
-            if (LIST_FILTER == 2) list.addAll(new AppData().get_arrayAppsGooglePlay(getApplicationContext(), packageManager));
-            if (LIST_FILTER == 3) list.addAll(new AppData().get_arrayAppsAll(getApplicationContext(), packageManager));
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-        runOnUiThread(() -> {
-            Log.i("APPS", list.toString());
-            adapter.setList(list);
-            progressBar.post(() -> progressBar.animate().alpha(0f).setDuration(200).start());
-            recyclerView.post(() -> recyclerView.animate().alpha(1f).setDuration(200).start());
-            chipGroup.post(() -> {
-                chipGroup.setEnabled(true);
-                chipGroup.setClickable(true);
-            });
-            LOADING_APPS = false;
         });
     }
 }

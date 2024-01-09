@@ -40,6 +40,14 @@
             android:name=".ManifestActivity"
             android:label="@string/action_manifest_app"
             android:exported="false"/>
+        <activity
+            android:name=".ClassActivity"
+            android:label="@string/action_class_app"
+            android:exported="false"/>
+        <activity
+            android:name=".ResourcesActivity"
+            android:label="@string/action_resources_app"
+            android:exported="false"/>
 
         <service
             android:name=".service.AppUsageService"

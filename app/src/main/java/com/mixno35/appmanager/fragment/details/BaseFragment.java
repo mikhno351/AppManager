@@ -27,6 +27,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.mixno35.appmanager.ManifestActivity;
 import com.mixno35.appmanager.R;
+import com.mixno35.appmanager.ResourcesActivity;
 import com.mixno35.appmanager.adapter.DetailInfoAdapter;
 import com.mixno35.appmanager.adapter.MenuAdapter;
 import com.mixno35.appmanager.data.AppData;
@@ -101,6 +102,7 @@ public class BaseFragment extends Fragment {
             list_menu.clear();
 
             list_menu.add(new MenuModel(getString(R.string.action_permissions_app), R.drawable.baseline_security_24, v -> new PermissionsDialog(requireActivity(), packageManager, packageName)));
+            list_menu.add(new MenuModel(getString(R.string.action_resources_app), R.drawable.outline_extension_24, v -> startActivity(new Intent(requireActivity(), ResourcesActivity.class).putExtra("packageName", packageName))));
             list_menu.add(new MenuModel(getString(R.string.action_manifest_app), R.drawable.baseline_android_24, v -> startActivity(new Intent(requireActivity(), ManifestActivity.class).putExtra("packageName", packageName))));
 
             String app_name = Objects.requireNonNull(packageInfo.applicationInfo.loadLabel(packageManager).toString());

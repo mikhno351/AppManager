@@ -76,6 +76,8 @@
     <string name="action_details_app">Details</string>
     <string name="action_permissions_app">Permissions</string>
     <string name="action_manifest_app">Manifest</string>
+    <string name="action_class_app">Classes</string>
+    <string name="action_resources_app">Resources</string>
 
     <string name="tab_details">Details</string>
     <string name="tab_basic">Basic</string>
