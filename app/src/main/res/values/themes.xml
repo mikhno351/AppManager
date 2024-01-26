@@ -5,7 +5,29 @@
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:windowAnimationStyle">@null</item>
+
+        <item name="preferenceTheme">@style/PreferenceTheme</item>
+
+        <item name="android:dialogTheme">@style/AlertDialogTheme</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="android:alertDialogStyle">@style/AlertDialogTheme</item>
+        <item name="android:dialogPreferenceStyle">@style/AlertDialogTheme</item>
     </style>
 
     <style name="Theme.AppManager" parent="Base.Theme.AppManager" />
+
+    <style name="PreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="android:tint">?colorControlNormal</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">?colorPrimaryDark</item>
+        <item name="colorAccent">?colorAccent</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MaterialAlertDialog.Rounded" parent="">
+        <item name="cornerSize">?cornerRadius</item>
+    </style>
 </resources>

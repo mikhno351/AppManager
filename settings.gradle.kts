@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.support.classFilePathCandidatesFor
+
 pluginManagement {
     repositories {
         google()

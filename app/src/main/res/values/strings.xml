@@ -36,6 +36,7 @@
     <string name="text_size_app">App</string>
     <string name="text_size_data">Data</string>
     <string name="text_size_cache">Cache</string>
+    <string name="text_default">Default</string>
 
     <string name="provenance_user">Installer</string>
     <string name="provenance_system">System</string>
@@ -61,6 +62,8 @@
     <string name="toast_extracting_apk_background">The extraction of the APK file will continue in the background…</string>
     <string name="text_copied_to_clipboard">Saved to the clipboard</string>
 
+    <string name="action_more">More</string>
+    <string name="action_settings">Settings</string>
     <string name="action_filter">Filters</string>
     <string name="action_provide">Provide</string>
     <string name="action_stop">Stop</string>
@@ -78,6 +81,15 @@
     <string name="action_manifest_app">Manifest</string>
     <string name="action_class_app">Classes</string>
     <string name="action_resources_app">Resources</string>
+
+    <string name="prefs_category_other">Other</string>
+    <string name="prefs_category_base">Base</string>
+
+    <string name="prefs_title_open_license_software" translatable="false">Open source licenses</string>
+    <string name="prefs_title_privacy">Policy privacy</string>
+    <string name="prefs_title_terms">Terms of Use</string>
+    <string name="prefs_title_about_app">About app</string>
+    <string name="prefs_title_language">Language</string>
 
     <string name="tab_details">Details</string>
     <string name="tab_basic">Basic</string>

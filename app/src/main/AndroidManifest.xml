@@ -48,6 +48,17 @@
             android:name=".ResourcesActivity"
             android:label="@string/action_resources_app"
             android:exported="false"/>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/action_settings"
+            android:exported="false"/>
+
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:theme="@style/Theme.AppCompat.DayNight" />
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:theme="@style/Theme.AppCompat.DayNight" />
 
         <service
             android:name=".service.AppUsageService"

@@ -8,12 +8,11 @@ import com.mixno35.appmanager.BuildConfig;
 
 public class MyApplication extends Application {
 
-    private Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
+    Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
 
     @Override
     @SuppressLint("UnspecifiedImmutableFlag")
     public void onCreate() {
-
         this.uncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 
         Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> {

@@ -32,6 +32,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.search.SearchBar;
+import com.google.android.material.search.SearchView;
 import com.google.android.material.snackbar.Snackbar;
 import com.mixno35.appmanager.adapter.AppAdapter;
 import com.mixno35.appmanager.data.AppData;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     CircularProgressIndicator progressBar;
     MaterialToolbar toolbar;
     SearchBar searchBar;
+    SearchView searchView;
     ChipGroup chipGroup;
     AppBarLayout appBarLayout;
 
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         progressBar = findViewById(R.id.progressBar);
         searchBar = findViewById(R.id.searchBar);
+        searchView = findViewById(R.id.searchView);
         chipGroup = findViewById(R.id.chipGroup);
         
         adapter = new AppAdapter(list, this, prefs);
@@ -125,15 +128,40 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
         } else startAppUsageService();
 
-        updateList();
+        updateList("");
 
         if (toolbar != null) setSupportActionBar(toolbar);
+
+        if (searchView != null) {
+            searchView.getEditText().setOnEditorActionListener((v, actionId, event) -> {
+                searchBar.setText(searchView.getText());
+                updateList(searchView.getText().toString());
+                searchView.hide();
+
+                return false;
+            });
+        }
+
+        if (searchView != null && searchBar != null) searchView.setupWithSearchBar(searchBar);
 
         appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
             int maxScroll = appBarLayout.getTotalScrollRange();
             float percentage = (float) Math.abs(verticalOffset) / (float) maxScroll;
 
-            searchBar.post(() -> searchBar.setAlpha(1 - (percentage * 1.3f)));
+            if (searchBar != null) {
+                searchBar.post(() -> searchBar.setAlpha(1 - (percentage * 1.3f)));
+
+                searchBar.setOnMenuItemClickListener(item -> {
+                    int id = item.getItemId();
+
+                    if (id == R.id.menuActionSettings) {
+                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                        return true;
+                    }
+
+                    return false;
+                });
+            }
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(recyclerView, (v, windowInsets) -> {
@@ -202,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
             prefs.edit().putInt(Data.PREFS_KEY_LIST_FILTER, LIST_FILTER).apply();
 
-            new Handler().postDelayed(this::updateList, 50);
+            new Handler().postDelayed(() -> updateList(""), 50);
         });
 
         uninstallAppLauncher = registerForActivityResult(
@@ -243,13 +271,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
-    private void startAppUsageService() {
+    void startAppUsageService() {
         startService(new Intent(this, AppUsageService.class));
     }
 
-    void updateList() {
+    void updateList(String search) {
         Executors.newSingleThreadExecutor().submit(() -> {
             runOnUiThread(() -> {
                 progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
@@ -269,10 +295,11 @@ public class MainActivity extends AppCompatActivity {
             try {
                 PackageManager packageManager = getPackageManager();
 
-                if (LIST_FILTER == 0) list.addAll(new AppData().get_arrayAppsUser(getApplicationContext(), packageManager));
-                if (LIST_FILTER == 1) list.addAll(new AppData().get_arrayAppsSystem(getApplicationContext(), packageManager));
-                if (LIST_FILTER == 2) list.addAll(new AppData().get_arrayAppsGooglePlay(getApplicationContext(), packageManager));
-                if (LIST_FILTER == 3) list.addAll(new AppData().get_arrayAppsAll(getApplicationContext(), packageManager));
+                if (search.trim().length() > 0) list.addAll(new AppData().get_arrayAppsFind(getApplicationContext(), packageManager, search));
+                else if (LIST_FILTER == 0) list.addAll(new AppData().get_arrayAppsUser(getApplicationContext(), packageManager));
+                else if (LIST_FILTER == 1) list.addAll(new AppData().get_arrayAppsSystem(getApplicationContext(), packageManager));
+                else if (LIST_FILTER == 2) list.addAll(new AppData().get_arrayAppsGooglePlay(getApplicationContext(), packageManager));
+                else if (LIST_FILTER == 3) list.addAll(new AppData().get_arrayAppsAll(getApplicationContext(), packageManager));
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }

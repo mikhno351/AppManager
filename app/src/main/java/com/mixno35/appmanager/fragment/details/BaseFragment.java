@@ -103,7 +103,6 @@ public class BaseFragment extends Fragment {
 
             list_menu.add(new MenuModel(getString(R.string.action_permissions_app), R.drawable.baseline_security_24, v -> new PermissionsDialog(requireActivity(), packageManager, packageName)));
             list_menu.add(new MenuModel(getString(R.string.action_resources_app), R.drawable.outline_extension_24, v -> startActivity(new Intent(requireActivity(), ResourcesActivity.class).putExtra("packageName", packageName))));
-            list_menu.add(new MenuModel(getString(R.string.action_manifest_app), R.drawable.baseline_android_24, v -> startActivity(new Intent(requireActivity(), ManifestActivity.class).putExtra("packageName", packageName))));
 
             String app_name = Objects.requireNonNull(packageInfo.applicationInfo.loadLabel(packageManager).toString());
             String app_package = Objects.requireNonNull(packageInfo.applicationInfo.packageName);

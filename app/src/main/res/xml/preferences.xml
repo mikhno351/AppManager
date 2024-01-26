@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory app:isPreferenceVisible="false" android:title="@string/prefs_category_base">
+        <androidx.preference.ListPreference
+            android:key="keyLanguage"
+            android:title="@string/prefs_title_language"
+            android:icon="@drawable/baseline_translate_24"
+            android:summary="%s"
+            android:defaultValue="0"
+            android:entries="@array/languages_string"
+            android:entryValues="@array/languages_value"
+            app:isPreferenceVisible="false"/>
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:title="@string/prefs_category_other">
+        <androidx.preference.Preference
+            android:key="keyOssLicenses"
+            android:title="@string/prefs_title_open_license_software">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.mixno35.appmanager"
+                android:targetClass="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"/>
+
+        </androidx.preference.Preference>
+
+        <androidx.preference.Preference
+            android:key="keyPrivacy"
+            android:title="@string/prefs_title_privacy"/>
+
+        <androidx.preference.Preference
+            android:key="keyTerms"
+            android:title="@string/prefs_title_terms"/>
+
+        <androidx.preference.Preference
+            android:key="keyAboutApp"
+            android:icon="@drawable/outline_info_24"
+            android:title="@string/prefs_title_about_app"/>
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

@@ -7,6 +7,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -31,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class Data {
@@ -46,6 +48,16 @@ public class Data {
     static String GOOGLE_PLAY_APP_LINK = "https://play.google.com/store/apps/details?id=%20";
 
     public static ArrayList<AndroidModel> ANDROID_VERSIONS = new ArrayList<>();
+
+    @SuppressLint("deprecation")
+    public static void setLocale(Context context, String languageCode) {
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Resources resources = context.getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
 
     @SuppressLint("DefaultLocale")
     public static String formatMillisToDHMS(long millis) {

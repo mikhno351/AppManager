@@ -23,7 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="@string/hint_search"
-                android:id="@+id/searchBar"/>
+                android:id="@+id/searchBar"
+                app:menu="@menu/main_menu"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -87,6 +88,15 @@
         </HorizontalScrollView>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.search.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/hint_search"
+        app:layout_anchor="@id/searchBar">
+        <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
+    </com.google.android.material.search.SearchView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
