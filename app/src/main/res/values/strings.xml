@@ -37,6 +37,12 @@
     <string name="text_size_data">Data</string>
     <string name="text_size_cache">Cache</string>
     <string name="text_default">Default</string>
+    <string name="text_prefs_changed">A key setting changed</string>
+    <string name="text_recent_requests">Recent requests</string>
+    <string name="text_time_day">d</string>
+    <string name="text_time_hour">h</string>
+    <string name="text_time_minute">m</string>
+    <string name="text_time_second">s</string>
 
     <string name="provenance_user">Installer</string>
     <string name="provenance_system">System</string>
@@ -54,6 +60,7 @@
     <string name="message_app_no_require_perms">The application does not require special permissions</string>
     <string name="message_no_detail_info_permission">There is no detailed information about the \"%s\" permission</string>
     <string name="message_package_usage_stats_size">Permission is required to see the size of the applications</string>
+    <string name="message_prefs_changed">You have changed an important setting, in order for it to be applied, you need to restart the application. Are you ready to do it now?</string>
 
     <string name="toast_app_not_deleted">The application has not been deleted.</string>
     <string name="toast_unknown_data_deleted">We were unable to process the deletion request inside the application.</string>
@@ -81,6 +88,7 @@
     <string name="action_manifest_app">Manifest</string>
     <string name="action_class_app">Classes</string>
     <string name="action_resources_app">Resources</string>
+    <string name="action_restart">Restart</string>
 
     <string name="prefs_category_other">Other</string>
     <string name="prefs_category_base">Base</string>

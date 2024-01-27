@@ -142,7 +142,7 @@ public class AppUsageService extends Service {
 
         Notification notification = new Notification.Builder(this, CHANNEL_ID)
                 .setContentTitle(getString(R.string.text_used_app, packageName))
-                .setContentText(getString(R.string.message_used_app, Data.formatMillisToDHMS(timeInForeground)))
+                .setContentText(getString(R.string.message_used_app, Data.formatMillisToDHMS(getApplicationContext(), timeInForeground)))
                 .setSmallIcon(R.drawable.baseline_adb_24)
                 .build();
 

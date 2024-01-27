@@ -7,7 +7,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -32,7 +31,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class Data {
@@ -49,30 +47,20 @@ public class Data {
 
     public static ArrayList<AndroidModel> ANDROID_VERSIONS = new ArrayList<>();
 
-    @SuppressLint("deprecation")
-    public static void setLocale(Context context, String languageCode) {
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-        Resources resources = context.getResources();
-        Configuration config = resources.getConfiguration();
-        config.setLocale(locale);
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
-    }
-
     @SuppressLint("DefaultLocale")
-    public static String formatMillisToDHMS(long millis) {
+    public static String formatMillisToDHMS(Context context, long millis) {
         long days = TimeUnit.MILLISECONDS.toDays(millis);
         long hours = TimeUnit.MILLISECONDS.toHours(millis) % 24;
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60;
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60;
 
         StringBuilder result = new StringBuilder();
-        if (days > 0) result.append(days).append("д. ");
-        if (hours > 0) result.append(hours).append("ч. ");
-        if (minutes > 0) result.append(minutes).append("м. ");
-        if (seconds > 0) result.append(seconds).append("с.");
+        if (days > 0) result.append(days).append(context.getString(R.string.text_time_day)).append(". ");
+        if (hours > 0) result.append(hours).append(context.getString(R.string.text_time_hour)).append(". ");
+        if (minutes > 0) result.append(minutes).append(context.getString(R.string.text_time_minute)).append(". ");
+        if (seconds > 0) result.append(seconds).append(context.getString(R.string.text_time_second)).append(". ");
 
-        return result.toString();
+        return result.toString().trim();
     }
 
     public static boolean hasUsageStatsPermission(@NonNull Context context) {

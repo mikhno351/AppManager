@@ -2,8 +2,14 @@
 <resources>
     <string-array name="languages_value">
         <item>0</item>
+        <item>en</item>
+        <item>ru</item>
+        <item>be</item>
     </string-array>
     <string-array name="languages_string">
         <item>@string/text_default</item>
+        <item>English</item>
+        <item>Русский</item>
+        <item>Беларуская</item>
     </string-array>
 </resources>

@@ -75,6 +75,7 @@ public class ResourcesActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            setTitle(getString(R.string.action_resources_app));
         }
 
         try {

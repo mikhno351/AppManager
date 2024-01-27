@@ -177,24 +177,4 @@ public class AppData {
 
         return list;
     }
-
-    public ArrayList<AppModel> get_arrayAppsFind(@NonNull Context context, @NonNull PackageManager packageManager, @NonNull String text) {
-        ArrayList<AppModel> list = new ArrayList<>();
-        List<PackageInfo> packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA);
-
-        for (PackageInfo info : packages) {
-            if (!info.packageName.equals(context.getPackageName())) {
-                String packageName = info.packageName;
-                String packageAppName = info.applicationInfo.loadLabel(packageManager).toString();
-
-                if (packageName.toLowerCase().contains(text.toLowerCase()) || packageAppName.toLowerCase().contains(text.toLowerCase())) list.add(new AppModel(
-                        packageName,
-                        packageAppName,
-                        info.applicationInfo.loadIcon(packageManager)
-                ));
-            }
-        }
-
-        return list;
-    }
 }

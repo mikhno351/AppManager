@@ -1,19 +1,24 @@
 package com.mixno35.appmanager.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mixno35.appmanager.BuildConfig;
 import com.mixno35.appmanager.R;
 import com.mixno35.appmanager.dialog.AppDetailDialog;
 
-public class SettingsFragment extends PreferenceFragmentCompat {
+import java.util.Objects;
+
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     Preference keyAboutApp, keyPrivacy, keyTerms;
 
@@ -29,6 +34,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Objects.requireNonNull(getPreferenceManager().getSharedPreferences()).registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Objects.requireNonNull(getPreferenceManager().getSharedPreferences()).unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
     public boolean onPreferenceTreeClick(@NonNull Preference preference) {
         if (keyPrivacy != null && preference.getKey().equals(keyPrivacy.getKey())) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://doc-hosting.flycricket.io/app-manager-privacy-policy/054a6c1b-521f-4e73-979d-ac6dc56172df/privacy")));
@@ -41,5 +58,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         }
         return super.onPreferenceTreeClick(preference);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        assert key != null;
+
+        if (key.equals("keyLanguage")) {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
+            builder.setTitle(getString(R.string.text_prefs_changed));
+            builder.setMessage(getString(R.string.message_prefs_changed));
+            builder.setCancelable(false);
+            builder.setPositiveButton(getString(R.string.action_restart), (dialog, which) -> System.exit(0));
+            builder.setNegativeButton(getString(R.string.action_cancel), (dialog, which) -> dialog.dismiss());
+            final AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 }

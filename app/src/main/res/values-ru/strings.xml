@@ -45,6 +45,7 @@
     <string name="channel_app_usage">Используемые приложения</string>
     <string name="action_cancel">Отмена</string>
     <string name="action_manifest_app">Манифест</string>
+    <string name="action_restart">Перезапустить</string>
     <string name="prefs_category_other">Другое</string>
     <string name="tab_details">Подробно</string>
     <string name="tab_basic">Основное</string>
@@ -58,6 +59,7 @@
     <string name="text_copy_to_clipboard">Копировать</string>
     <string name="text_source_dir">Исходный каталог</string>
     <string name="text_default">По умолчанию</string>
+    <string name="text_time_minute">м</string>
     <string name="provenance_user">Установщик</string>
     <string name="provenance_system">Система</string>
     <string name="text_min_sdk">Минимальная ОС</string>
@@ -81,4 +83,10 @@
     <string name="prefs_title_about_app">О приложении</string>
     <string name="prefs_category_base">Основные</string>
     <string name="prefs_title_language">Язык</string>
+    <string name="text_prefs_changed">Важная настройка изменена</string>
+    <string name="message_prefs_changed">Вы изменили важную настройку, для того чтобы она была применена, вам необходимо перезапустить приложение. Вы готовы сделать это сейчас?</string>
+    <string name="text_recent_requests">Недавние запросы</string>
+    <string name="text_time_second">с</string>
+    <string name="text_time_hour">ч</string>
+    <string name="text_time_day">д</string>
 </resources>

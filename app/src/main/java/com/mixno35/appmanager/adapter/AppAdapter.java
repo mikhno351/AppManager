@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -18,15 +20,17 @@ import com.mixno35.appmanager.model.AppModel;
 
 import java.util.ArrayList;
 
-public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AdapterHolder> {
+public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AdapterHolder> implements Filterable {
 
     ArrayList<AppModel> list;
+    ArrayList<AppModel> appModelsFull;
     Context context;
     SharedPreferences prefs;
 
     @SuppressLint("NotifyDataSetChanged")
     public void setList(@NonNull ArrayList<AppModel> list) {
         this.list = list;
+        this.appModelsFull = new ArrayList<>(list);
         this.list.sort(AppModel.NameComparator);
         this.notifyDataSetChanged();
     }
@@ -60,6 +64,43 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AdapterHolder> {
     public int getItemCount() {
         return list.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return appModelFilter;
+    }
+
+    Filter appModelFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<AppModel> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(appModelsFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (AppModel appModel : appModelsFull) {
+                    if (appModel.get_name().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(appModel);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            list.clear();
+            list.addAll((ArrayList) results.values);
+            list.sort(AppModel.NameComparator);
+            notifyDataSetChanged();
+        }
+    };
 
     public static class AdapterHolder extends RecyclerView.ViewHolder {
 

@@ -10,11 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -23,7 +23,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
+import android.window.OnBackInvokedDispatcher;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -35,6 +37,7 @@ import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
 import com.google.android.material.snackbar.Snackbar;
 import com.mixno35.appmanager.adapter.AppAdapter;
+import com.mixno35.appmanager.adapter.RecentAdapter;
 import com.mixno35.appmanager.data.AppData;
 import com.mixno35.appmanager.data.Data;
 import com.mixno35.appmanager.dialog.AppDetailDialog;
@@ -43,6 +46,7 @@ import com.mixno35.appmanager.model.AppModel;
 import com.mixno35.appmanager.service.AppUsageService;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 
@@ -62,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     ChipGroup chipGroup;
     AppBarLayout appBarLayout;
 
+    ListView listViewRecent;
+
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this) {
         @Override
@@ -80,14 +86,18 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences prefs;
 
+    RecentAdapter adapterRecent;
+    List<String> listRecent = new ArrayList<>();
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) EdgeToEdge.enable(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        prefs = getSharedPreferences(Data.PREFS_NAME(getApplicationContext()), Context.MODE_PRIVATE);
 
         APP_PACKAGE_REMOVE = "";
         LIST_FILTER = prefs.getInt(Data.PREFS_KEY_LIST_FILTER, 0);
@@ -101,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         searchBar = findViewById(R.id.searchBar);
         searchView = findViewById(R.id.searchView);
         chipGroup = findViewById(R.id.chipGroup);
+        listViewRecent = findViewById(R.id.listViewRecent);
         
         adapter = new AppAdapter(list, this, prefs);
 
@@ -115,6 +126,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if (listViewRecent != null) {
+            adapterRecent = new RecentAdapter(this, listRecent);
+            listViewRecent.setAdapter(adapterRecent);
+            listViewRecent.setOnItemClickListener((parent, view, position, id) -> {
+                String text = Objects.requireNonNull(adapterRecent.getItem(position)).trim();
+
+                if (searchView != null) {
+                    searchView.setText(text);
+                    searchView.hide();
+                }
+                if (searchBar != null) searchBar.setText(text);
+                adapter.getFilter().filter(text);
+            });
+        }
+
         if (!Data.hasUsageStatsPermission(this) && !prefs.getBoolean(Data.PREFS_KEY_APP_USE_PERMISSION, false)) {
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
             builder.setTitle(getString(R.string.text_package_usage_stats));
@@ -128,17 +154,23 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
         } else startAppUsageService();
 
-        updateList("");
+        updateList();
 
         if (toolbar != null) setSupportActionBar(toolbar);
 
         if (searchView != null) {
             searchView.getEditText().setOnEditorActionListener((v, actionId, event) -> {
-                searchBar.setText(searchView.getText());
-                updateList(searchView.getText().toString());
+                String text = String.valueOf(searchView.getText()).trim();
+                if (searchBar != null) searchBar.setText(text);
+                adapter.getFilter().filter(text);
                 searchView.hide();
+                if (searchView.getText().length() >= 2 && !adapterRecent.isItemContains(text)) listRecent.add(text);
 
                 return false;
+            });
+
+            searchView.addTransitionListener((searchView, previousState, newState) -> {
+                if (newState == SearchView.TransitionState.SHOWING) adapterRecent.notifyDataSetChanged();
             });
         }
 
@@ -230,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
             prefs.edit().putInt(Data.PREFS_KEY_LIST_FILTER, LIST_FILTER).apply();
 
-            new Handler().postDelayed(() -> updateList(""), 50);
+            new Handler().postDelayed(this::updateList, 50);
         });
 
         uninstallAppLauncher = registerForActivityResult(
@@ -271,11 +303,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @NonNull
+    @Override
+    public OnBackInvokedDispatcher getOnBackInvokedDispatcher() {
+        if (searchView != null && searchView.getCurrentTransitionState() == SearchView.TransitionState.SHOWING) searchView.hide();
+        return super.getOnBackInvokedDispatcher();
+    }
+
     void startAppUsageService() {
         startService(new Intent(this, AppUsageService.class));
     }
 
-    void updateList(String search) {
+    void updateList() {
         Executors.newSingleThreadExecutor().submit(() -> {
             runOnUiThread(() -> {
                 progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
@@ -295,8 +334,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 PackageManager packageManager = getPackageManager();
 
-                if (search.trim().length() > 0) list.addAll(new AppData().get_arrayAppsFind(getApplicationContext(), packageManager, search));
-                else if (LIST_FILTER == 0) list.addAll(new AppData().get_arrayAppsUser(getApplicationContext(), packageManager));
+                if (LIST_FILTER == 0) list.addAll(new AppData().get_arrayAppsUser(getApplicationContext(), packageManager));
                 else if (LIST_FILTER == 1) list.addAll(new AppData().get_arrayAppsSystem(getApplicationContext(), packageManager));
                 else if (LIST_FILTER == 2) list.addAll(new AppData().get_arrayAppsGooglePlay(getApplicationContext(), packageManager));
                 else if (LIST_FILTER == 3) list.addAll(new AppData().get_arrayAppsAll(getApplicationContext(), packageManager));

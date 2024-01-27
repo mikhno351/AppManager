@@ -2,9 +2,16 @@ package com.mixno35.appmanager.data;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.SharedPreferences;
+
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.color.DynamicColors;
 import com.mixno35.appmanager.BuildConfig;
+
+import java.util.Locale;
 
 public class MyApplication extends Application {
 
@@ -13,6 +20,10 @@ public class MyApplication extends Application {
     @Override
     @SuppressLint("UnspecifiedImmutableFlag")
     public void onCreate() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (!prefs.getString("keyLanguage", "0").equals("0")) AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(Locale.forLanguageTag(prefs.getString("keyLanguage", "en"))));
+
         this.uncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 
         Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> {
