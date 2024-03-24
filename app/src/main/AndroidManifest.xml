@@ -37,18 +37,6 @@
             android:label="@string/action_details_app"
             android:exported="false"/>
         <activity
-            android:name=".ManifestActivity"
-            android:label="@string/action_manifest_app"
-            android:exported="false"/>
-        <activity
-            android:name=".ClassActivity"
-            android:label="@string/action_class_app"
-            android:exported="false"/>
-        <activity
-            android:name=".ResourcesActivity"
-            android:label="@string/action_resources_app"
-            android:exported="false"/>
-        <activity
             android:name=".SettingsActivity"
             android:label="@string/action_settings"
             android:exported="false"/>
@@ -59,10 +47,6 @@
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
             android:theme="@style/Theme.AppCompat.DayNight" />
-
-        <service
-            android:name=".service.AppUsageService"
-            android:exported="false"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

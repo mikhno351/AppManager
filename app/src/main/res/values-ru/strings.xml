@@ -54,7 +54,7 @@
     <string name="action_permissions_app">Разрешения</string>
     <string name="text_app_install_time">Время установки</string>
     <string name="text_app_update_time">Время обновления</string>
-    <string name="text_app_provenance">Источник</string>
+    <string name="text_app_provenance">Источник установки</string>
     <string name="text_nothing">Здесь ничего нет</string>
     <string name="text_copy_to_clipboard">Копировать</string>
     <string name="text_source_dir">Исходный каталог</string>
@@ -62,8 +62,8 @@
     <string name="text_time_minute">м</string>
     <string name="provenance_user">Установщик</string>
     <string name="provenance_system">Система</string>
-    <string name="text_min_sdk">Минимальная ОС</string>
-    <string name="text_target_sdk">Целевая ОС</string>
+    <string name="text_min_sdk">Минимальная версия SDK (API)</string>
+    <string name="text_target_sdk">Целевая версия SDK (API)</string>
     <string name="text_executed_apk">Извлеченный APK</string>
     <string name="text_copied_to_clipboard">Сохранено в буфер обмена</string>
     <string name="text_pub_source_dir">Публичный исходный каталог</string>
@@ -72,10 +72,8 @@
     <string name="text_compile_sdk_version">Версия SDK компилятора</string>
     <string name="text_backup_agent">Агент резервного копирования</string>
     <string name="action_find_in_gp_app">Искать в Google Play</string>
-    <string name="text_size_app">Приложение</string>
     <string name="text_size_data">Данные</string>
-    <string name="text_size_cache">Кэш</string>
-    <string name="action_class_app">Классы</string>
+    <string name="text_size_cache">Кеш</string>
     <string name="action_resources_app">Ресурсы</string>
     <string name="action_settings">Настройки</string>
     <string name="prefs_title_privacy">Политика конфиденциальности</string>
@@ -89,4 +87,8 @@
     <string name="text_time_second">с</string>
     <string name="text_time_hour">ч</string>
     <string name="text_time_day">д</string>
+    <string name="text_bytes">Б КБ МБ ГБ ТБ</string>
+    <string name="message_app_no_require_activities">Это приложение не содержит никаких доступных активностей</string>
+    <string name="text_apk_extracted_hidden">APK файл успешно извлечен</string>
+    <string name="message_apk_extracted_hidden">Файл \"%1s\" успешно извлечен, теперь вы можете им поделиться</string>
 </resources>

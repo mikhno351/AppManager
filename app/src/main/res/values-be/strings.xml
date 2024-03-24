@@ -54,7 +54,7 @@
     <string name="action_permissions_app">Дазволы</string>
     <string name="text_app_install_time">Час устаноўкі</string>
     <string name="text_app_update_time">Час абнаўлення</string>
-    <string name="text_app_provenance">Крыніца</string>
+    <string name="text_app_provenance">Крыніца устаноўкі</string>
     <string name="text_nothing">Тут нічога няма</string>
     <string name="text_copy_to_clipboard">Капіраваць</string>
     <string name="text_source_dir">Выхадны каталог</string>
@@ -62,8 +62,8 @@
     <string name="text_time_minute">х</string>
     <string name="provenance_user">Усталёўшчык</string>
     <string name="provenance_system">Сістэма</string>
-    <string name="text_min_sdk">Мінімальная АС</string>
-    <string name="text_target_sdk">Мэтавая АС</string>
+    <string name="text_min_sdk">Мінімальная версія SDK (API)</string>
+    <string name="text_target_sdk">Мэтавая версія SDK (API)</string>
     <string name="text_executed_apk">Выдзелены APK</string>
     <string name="text_copied_to_clipboard">Захавана ў буфер абмену</string>
     <string name="text_pub_source_dir">Грамадскі выхадны каталог</string>
@@ -72,10 +72,8 @@
     <string name="text_compile_sdk_version">Версія SDK кампілятара</string>
     <string name="text_backup_agent">Агент рэзервовай копіі</string>
     <string name="action_find_in_gp_app">Шукаць у Google Play</string>
-    <string name="text_size_app">Праграма</string>
     <string name="text_size_data">Дадзеныя</string>
     <string name="text_size_cache">Кэш</string>
-    <string name="action_class_app">Класы</string>
     <string name="action_resources_app">Рэсурсы</string>
     <string name="action_settings">Налады</string>
     <string name="prefs_title_privacy">Палітыка канфідэнцыяльнасці</string>
@@ -89,4 +87,8 @@
     <string name="text_time_second">с</string>
     <string name="text_time_hour">г</string>
     <string name="text_time_day">д</string>
+    <string name="text_bytes">Б КБ МБ ГБ ТБ</string>
+    <string name="message_app_no_require_activities">Гэта прыкладанне не ўтрымлівае ніякіх даступных актыўнасцей</string>
+    <string name="text_apk_extracted_hidden">APK файл паспяхова выдзелены</string>
+    <string name="message_apk_extracted_hidden">Файл \"%1s\" паспяхова выдзелены, цяпер вы можаце ім падзяліцца</string>
 </resources>

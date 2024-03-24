@@ -15,11 +15,11 @@ if (buildNumberFile.exists()) buildNumber = buildNumberFile.readText().toIntOrNu
 buildNumberFile.writeText((buildNumber + 1).toString())
 
 android {
-    namespace = "com.mixno35.appmanager"
+    namespace = "com.mixno35.app_manager"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.mixno35.appmanager"
+        applicationId = "com.mixno35.app_manager"
         minSdk = 27
         targetSdk = 34
         versionCode = buildNumber
@@ -51,7 +51,6 @@ dependencies {
     implementation("androidx.preference:preference:1.2.1")
     implementation("androidx.fragment:fragment:1.6.2")
     implementation("com.jaredrummler:apk-parser:1.0.2")
-    implementation("com.getkeepsafe.taptargetview:taptargetview:1.13.3")
     implementation("androidx.core:core:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
