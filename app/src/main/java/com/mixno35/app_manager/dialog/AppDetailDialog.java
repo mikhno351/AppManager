@@ -6,7 +6,6 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +14,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textview.MaterialTextView;
 import com.mixno35.app_manager.DetailsActivity;
 import com.mixno35.app_manager.R;
-import com.mixno35.app_manager.adapter.MenuAdapter;
+import com.mixno35.app_manager.adapter.MenuHorizontalAdapter;
 import com.mixno35.app_manager.data.ApkExtractor;
 import com.mixno35.app_manager.data.AppData;
 import com.mixno35.app_manager.data.Data;
-import com.mixno35.app_manager.decoration.GridSpacingItemDecoration;
 import com.mixno35.app_manager.model.MenuModel;
 
 import java.util.ArrayList;
@@ -37,7 +35,7 @@ public class AppDetailDialog {
     public static boolean isOpened = false;
 
     AppCompatImageView iconImageView;
-    MaterialTextView nameTextView, packageTextView, versionTextView;
+    MaterialTextView nameTextView, packageTextView;
     RecyclerView recyclerView;
     LinearLayoutCompat mainContent, errorContent;
 
@@ -61,7 +59,6 @@ public class AppDetailDialog {
         iconImageView = view.findViewById(R.id.iconImageView);
         nameTextView = view.findViewById(R.id.nameTextView);
         packageTextView = view.findViewById(R.id.packageTextView);
-        versionTextView = view.findViewById(R.id.versionTextView);
         recyclerView = view.findViewById(R.id.recyclerView);
         mainContent = view.findViewById(R.id.mainContent);
         errorContent = view.findViewById(R.id.errorContent);
@@ -88,28 +85,23 @@ public class AppDetailDialog {
                 context.startActivity(new Intent(context, DetailsActivity.class).putExtra("packageName", packageName), options.toBundle());
             }));
 
-            recyclerView.setLayoutManager(new GridLayoutManager(context, 4));
-            recyclerView.addItemDecoration(new GridSpacingItemDecoration(60, 4));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            MenuAdapter adapter = new MenuAdapter(list, context);
+            MenuHorizontalAdapter adapter = new MenuHorizontalAdapter(list, context);
             recyclerView.setAdapter(adapter);
 
             try {
                 ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
-                PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
 
                 iconImageView.post(() -> iconImageView.setImageDrawable(applicationInfo.loadIcon(packageManager)));
                 nameTextView.post(() -> nameTextView.setText(applicationInfo.loadLabel(packageManager)));
                 packageTextView.post(() -> packageTextView.setText(applicationInfo.packageName));
-                versionTextView.post(() -> versionTextView.setText(String.format("%s (%s)", packageInfo.versionName, packageInfo.versionCode)));
             } catch (Exception e) {
                 mainContent.post(() -> mainContent.setVisibility(View.GONE));
                 errorContent.post(() -> errorContent.setVisibility(View.VISIBLE));
                 Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) {}
 
         dialog = new BottomSheetDialog(context);
         dialog.setContentView(view);

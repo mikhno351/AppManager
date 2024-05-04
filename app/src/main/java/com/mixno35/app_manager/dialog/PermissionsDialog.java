@@ -38,7 +38,7 @@ public class PermissionsDialog {
         LinearLayoutCompat mainContent = view.findViewById(R.id.mainContent);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         CircularProgressIndicator progressBar = view.findViewById(R.id.progressBar);
-        MaterialTextView countTextView = view.findViewById(R.id.countTextView);
+        MaterialTextView titleTextView = view.findViewById(R.id.titleTextView);
 
         ArrayList<PermissionModel> list = new ArrayList<>();
         PermissionAdapter adapter = new PermissionAdapter(list, context, packageManager);
@@ -73,7 +73,9 @@ public class PermissionsDialog {
                     mainContent.post(() -> mainContent.setVisibility(View.GONE));
                     errorContent.post(() -> errorContent.setVisibility(View.VISIBLE));
                 }
-                countTextView.post(() -> countTextView.setText(String.valueOf(list.size())));
+
+                titleTextView.post(() -> titleTextView.append(" (" + list.size() + ")"));
+
                 adapter.setList(list);
                 new Handler().postDelayed(() -> {
                     progressBar.post(() -> progressBar.animate().alpha(0f).setDuration(200).start());

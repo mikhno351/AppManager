@@ -17,17 +17,16 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/titleTextView"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxWidth="280dp"
             android:text="@string/action_permissions_app"
-            android:gravity="center_horizontal"
-            android:layout_gravity="center_horizontal"
+            android:paddingHorizontal="22dp"
             android:singleLine="true"
             android:ellipsize="middle"
             android:scrollbars="vertical"
             android:fadeScrollbars="false"
+            android:textAppearance="@style/TextAppearance.Material3.ActionBar.Title"
             android:scrollbarStyle="outsideOverlay"
             tools:ignore="HardcodedText" />
 
@@ -72,19 +71,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/mainContent">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/countTextView"
-                style="@style/TextAppearance.MaterialComponents.Body2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="280dp"
-                android:text="0"
-                android:gravity="center_horizontal"
-                android:layout_gravity="center_horizontal"
-                android:singleLine="true"
-                android:ellipsize="middle"
-                tools:ignore="HardcodedText" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"

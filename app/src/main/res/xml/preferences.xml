@@ -35,6 +35,7 @@
             android:key="keyAboutApp"
             android:icon="@drawable/outline_info_24"
             android:title="@string/prefs_title_about_app"/>
+
     </androidx.preference.PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

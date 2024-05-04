@@ -10,9 +10,13 @@
 
         <item name="preferenceTheme">@style/PreferenceTheme</item>
 
-        <item name="android:dialogTheme">@style/AlertDialogTheme</item>
-        <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
-        <item name="android:alertDialogStyle">@style/AlertDialogTheme</item>
-        <item name="android:dialogPreferenceStyle">@style/AlertDialogTheme</item>
+        <item name="android:dialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+        <item name="android:alertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+        <item name="android:alertDialogStyle">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+        <item name="android:dialogPreferenceStyle">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+        <item name="alertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+
+        <item name="dialogCornerRadius">28dp</item>
     </style>
 </resources>

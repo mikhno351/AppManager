@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="16dp"
+    android:paddingVertical="16dp"
+    android:paddingHorizontal="16dp"
     android:background="?selectableItemBackground"
     android:gravity="center_vertical"
     tools:ignore="UnusedAttribute">
@@ -28,21 +29,21 @@
             android:id="@+id/appName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:singleLine="true"
             android:ellipsize="end"
-            android:textColor="?attr/colorOnSurface" />
+            android:text="App Name"
+            tools:ignore="HardcodedText" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/appPackage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="?attr/colorOnSurface"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:ellipsize="middle"
-            android:layout_marginTop="4dp"
-            android:singleLine="true" />
+            android:text="com.app.name"
+            android:singleLine="true"
+            tools:ignore="HardcodedText" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

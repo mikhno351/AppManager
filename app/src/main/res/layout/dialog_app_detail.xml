@@ -59,15 +59,18 @@
                 android:paddingTop="48dp"
                 android:paddingBottom="24dp">
 
-                <RelativeLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_horizontal">
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="22dp"
+                    android:paddingBottom="16dp">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iconImageView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@mipmap/ic_launcher"
                         android:layout_gravity="center_horizontal"
                         android:background="@android:color/transparent"
@@ -75,67 +78,58 @@
                         android:contentDescription="@string/contentDescription_app_icon"
                         tools:ignore="HardcodedText" />
 
-                </RelativeLayout>
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="16dp">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/nameTextView"
-                    style="@style/TextAppearance.MaterialComponents.Headline6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxWidth="280dp"
-                    android:text="App Name"
-                    android:gravity="center_horizontal"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
-                    android:singleLine="true"
-                    android:ellipsize="middle"
-                    android:scrollbars="vertical"
-                    android:fadeScrollbars="false"
-                    android:scrollbarStyle="outsideOverlay"
-                    tools:ignore="HardcodedText" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/nameTextView"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxWidth="280dp"
+                            android:text="App Name"
+                            android:singleLine="true"
+                            android:ellipsize="middle"
+                            android:scrollbars="vertical"
+                            android:fadeScrollbars="false"
+                            android:scrollbarStyle="outsideOverlay"
+                            android:letterSpacing="-.02"
+                            tools:ignore="HardcodedText" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/packageTextView"
-                    style="@style/TextAppearance.MaterialComponents.Body2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxWidth="280dp"
-                    android:text="Package Name"
-                    android:gravity="center_horizontal"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="4dp"
-                    android:singleLine="true"
-                    android:ellipsize="middle"
-                    android:scrollbars="vertical"
-                    android:fadeScrollbars="false"
-                    android:scrollbarStyle="outsideOverlay"
-                    tools:ignore="HardcodedText" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/packageTextView"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxWidth="280dp"
+                            android:text="com.app.name"
+                            android:singleLine="true"
+                            android:ellipsize="middle"
+                            android:scrollbars="vertical"
+                            android:fadeScrollbars="false"
+                            android:letterSpacing="-.02"
+                            android:scrollbarStyle="outsideOverlay"
+                            tools:ignore="HardcodedText" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/versionTextView"
-                    style="@style/TextAppearance.MaterialComponents.Body2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxWidth="280dp"
-                    android:text="Version 1.0"
-                    android:gravity="center_horizontal"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="4dp"
-                    android:singleLine="true"
-                    android:ellipsize="middle"
-                    android:scrollbars="vertical"
-                    android:fadeScrollbars="false"
-                    android:scrollbarStyle="outsideOverlay"
-                    tools:ignore="HardcodedText" />
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?dividerVertical"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/recyclerView"
-                    android:paddingHorizontal="16dp"
-                    android:layout_marginTop="36dp"
                     android:nestedScrollingEnabled="false"
-                    tools:ignore="UnusedAttribute" />
+                    tools:ignore="UnusedAttribute"
+                    android:layout_marginTop="12dp"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

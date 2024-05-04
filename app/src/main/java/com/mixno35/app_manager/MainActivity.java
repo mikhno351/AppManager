@@ -186,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             Objects.requireNonNull(tabLayout.getTabAt(LIST_FILTER)).select();
+            tabLayout.setScrollPosition(LIST_FILTER, 0f, true);
 
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override

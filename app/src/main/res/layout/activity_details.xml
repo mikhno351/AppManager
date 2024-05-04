@@ -52,7 +52,7 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                            android:textAppearance="@style/TextAppearance.Material3.ActionBar.Title"
                             android:text="App Name"
                             android:gravity="center"
                             android:singleLine="true"

@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="Permission Name"
             android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textAppearance="@style/TextAppearance.Material3.ActionBar.Title"
             android:layout_marginTop="16dp"
             tools:ignore="HardcodedText" />
 
@@ -36,8 +36,8 @@
             android:layout_height="wrap_content"
             android:text="Permission Description"
             android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:layout_marginTop="4dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:layout_marginTop="12dp"
             tools:ignore="HardcodedText" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

@@ -5,53 +5,33 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="?selectableItemBackground"
-    android:paddingTop="8dp"
-    android:paddingHorizontal="16dp">
+    android:paddingVertical="8dp"
+    android:paddingHorizontal="22dp">
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
         android:text="Label"
         android:id="@+id/titleTextView"
-        android:fontFamily="sans-serif"
-        android:textAllCaps="true"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:letterSpacing="0.06"
         tools:ignore="HardcodedText" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         android:text="Label"
         android:id="@+id/valueTextView"
-        android:fontFamily="sans-serif-medium"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
         tools:ignore="HardcodedText" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
         android:text="Label"
         android:id="@+id/detailTextView"
-        android:fontFamily="sans-serif"
-        android:textAllCaps="true"
         android:singleLine="true"
         android:ellipsize="end"
-        android:letterSpacing="0.06"
         tools:ignore="HardcodedText" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?dividerVertical"
-        android:layout_marginTop="8dp"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

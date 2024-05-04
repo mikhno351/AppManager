@@ -39,7 +39,7 @@ public class ActivitiesDialog {
         LinearLayoutCompat mainContent = view.findViewById(R.id.mainContent);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         CircularProgressIndicator progressBar = view.findViewById(R.id.progressBar);
-        MaterialTextView countTextView = view.findViewById(R.id.countTextView);
+        MaterialTextView titleTextView = view.findViewById(R.id.titleTextView);
 
         ArrayList<ActivityModel> list = new ArrayList<>();
         ActivityAdapter adapter = new ActivityAdapter(list, context);
@@ -82,7 +82,7 @@ public class ActivitiesDialog {
                     errorContent.post(() -> errorContent.setVisibility(View.VISIBLE));
                 }
 
-                countTextView.post(() -> countTextView.setText(String.valueOf(list.size())));
+                titleTextView.post(() -> titleTextView.append(" (" + list.size() + ")"));
 
                 new Handler().postDelayed(() -> {
                     progressBar.post(() -> progressBar.animate().alpha(0f).setDuration(200).start());

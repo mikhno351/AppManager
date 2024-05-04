@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,11 +18,9 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textview.MaterialTextView;
 import com.mixno35.app_manager.R;
 import com.mixno35.app_manager.adapter.ResourceAdapter;
-import com.mixno35.app_manager.data.ApkExtractor;
 import com.mixno35.app_manager.model.ResourceApkModel;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.concurrent.Executors;
@@ -41,7 +38,7 @@ public class ResourcesDialog {
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         CircularProgressIndicator progressBar = view.findViewById(R.id.progressBar);
-        MaterialTextView countTextView = view.findViewById(R.id.countTextView);
+        MaterialTextView titleTextView = view.findViewById(R.id.titleTextView);
 
         ArrayList<ResourceApkModel> list = new ArrayList<>();
         ResourceAdapter adapter = new ResourceAdapter(list, context);
@@ -82,7 +79,7 @@ public class ResourcesDialog {
             ((Activity) context).runOnUiThread(() -> {
                 adapter.setList(list);
 
-                countTextView.post(() -> countTextView.setText(String.valueOf(list.size())));
+                titleTextView.post(() -> titleTextView.append(" (" + list.size() + ")"));
 
                 new Handler().postDelayed(() -> {
                     progressBar.post(() -> progressBar.animate().alpha(0f).setDuration(200).start());
