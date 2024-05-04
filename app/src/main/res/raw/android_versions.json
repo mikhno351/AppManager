@@ -1,6 +1,6 @@
 [
   ["0.0", "-"],
-  ["0.0", "-"],
+  ["1.0", "-"],
   ["1.1", "Petit Four"],
   ["1.5", "Cupcake"],
   ["1.6", "Donut"],
@@ -19,7 +19,7 @@
   ["4.2", "Jelly Bean"],
   ["4.3", "Jelly Bean"],
   ["4.4", "KitKat"],
-  ["4.4", "KitKat"],
+  ["4.4.2", "KitKat"],
   ["5.0", "Lollipop"],
   ["5.1", "Lollipop"],
   ["6.0", "Marshmallow"],
@@ -28,11 +28,11 @@
   ["8.0", "Oreo"],
   ["8.1", "Oreo"],
   ["9", "Pie"],
-  ["10", "Q"],
-  ["11", "R"],
-  ["12", "S"],
-  ["12L", "S"],
-  ["13", "T"],
-  ["14", "U"],
-  ["15", "V"]
+  ["10", "Quince Tart"],
+  ["11", "Red Velvet Cake"],
+  ["12", "Snow Cone"],
+  ["12L", "Snow Cone"],
+  ["13", "Tiramisu"],
+  ["14", "Upside Down Cake"],
+  ["15", "Vanilla Ice Cream"]
 ]

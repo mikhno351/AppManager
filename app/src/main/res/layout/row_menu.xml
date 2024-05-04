@@ -19,14 +19,18 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/titleTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Menu Item"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="?android:textColorPrimary"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="8sp"
+        android:autoSizeMaxTextSize="14sp"
+        android:autoSizeStepGranularity="2sp"
         android:gravity="center_horizontal"
         android:singleLine="true"
         android:ellipsize="end"
-        android:paddingTop="8dp"
+        android:layout_marginTop="8dp"
         tools:ignore="HardcodedText" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

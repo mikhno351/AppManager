@@ -28,64 +28,19 @@
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <HorizontalScrollView
-            android:id="@+id/contentChips"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbarThumbHorizontal="@null"
-            android:scrollbarTrackHorizontal="@null">
+            android:background="@android:color/transparent"
+            app:tabMode="scrollable"
+            app:tabGravity="fill"
+            app:tabUnboundedRipple="true"/>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    app:singleLine="true"
-                    app:selectionRequired="true"
-                    app:singleSelection="true">
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipBy0"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/Widget.Material3.Chip.Filter"
-                        app:chipIconTint="?colorControlNormal"
-                        android:text="@string/text_user_apps"/>
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipBy1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/Widget.Material3.Chip.Filter"
-                        app:chipIconTint="?colorControlNormal"
-                        android:text="@string/text_system_apps"/>
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipBy2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:chipIconTint="?colorControlNormal"
-                        style="@style/Widget.Material3.Chip.Filter"
-                        android:text="@string/text_google_play"/>
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipBy3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:chipIconTint="?colorControlNormal"
-                        style="@style/Widget.Material3.Chip.Filter"
-                        android:text="@string/text_all_apps"/>
-
-                </com.google.android.material.chip.ChipGroup>
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-        </HorizontalScrollView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?dividerVertical"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -28,12 +28,11 @@ import android.window.OnBackInvokedDispatcher;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 import com.mixno35.app_manager.adapter.AppAdapter;
 import com.mixno35.app_manager.adapter.RecentAdapter;
 import com.mixno35.app_manager.data.AppData;
@@ -57,10 +56,11 @@ public class MainActivity extends AppCompatActivity {
     MaterialToolbar toolbar;
     SearchBar searchBar;
     SearchView searchView;
-    ChipGroup chipGroup;
     AppBarLayout appBarLayout;
 
     ListView listViewRecent;
+
+    TabLayout tabLayout;
 
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this) {
@@ -105,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         searchBar = findViewById(R.id.searchBar);
         searchView = findViewById(R.id.searchView);
-        chipGroup = findViewById(R.id.chipGroup);
         listViewRecent = findViewById(R.id.listViewRecent);
+        tabLayout = findViewById(R.id.tabLayout);
         
         adapter = new AppAdapter(list, this, prefs);
 
@@ -171,6 +171,43 @@ public class MainActivity extends AppCompatActivity {
             searchView.setupWithSearchBar(searchBar);
         }
 
+        if (tabLayout != null) {
+            tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.text_user_apps)));
+            tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.text_system_apps)));
+            tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.text_google_play)));
+            tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.text_all_apps)));
+
+            ViewCompat.setOnApplyWindowInsetsListener(tabLayout, (v, windowInsets) -> {
+                Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+                layoutParams.setMargins(insets.left, 0, insets.right, 0);
+
+                return WindowInsetsCompat.CONSUMED;
+            });
+
+            Objects.requireNonNull(tabLayout.getTabAt(LIST_FILTER)).select();
+
+            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    if (LOADING_APPS) return;
+                    if (RECYCLER_SCROLLING) recyclerView.post(() -> recyclerView.stopScroll());
+
+                    LIST_FILTER = tab.getPosition();
+
+                    prefs.edit().putInt(Data.PREFS_KEY_LIST_FILTER, LIST_FILTER).apply();
+
+                    new Handler().postDelayed(updateList(), 50);
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {}
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {}
+            });
+        }
+
         appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
             int maxScroll = appBarLayout.getTotalScrollRange();
             float percentage = (float) Math.abs(verticalOffset) / (float) maxScroll;
@@ -204,31 +241,6 @@ public class MainActivity extends AppCompatActivity {
 
             return WindowInsetsCompat.CONSUMED;
         });
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.contentChips), (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            layoutParams.setMargins(insets.left, 0, insets.right, 0);
-
-            return WindowInsetsCompat.CONSUMED;
-        });
-
-        Chip activeChip = ((Chip) chipGroup.getChildAt(LIST_FILTER));
-
-        if (activeChip != null) activeChip.setChecked(true);
-
-        chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            if (LOADING_APPS) return;
-            if (RECYCLER_SCROLLING) recyclerView.post(() -> recyclerView.stopScroll());
-
-            if (group.getCheckedChipId() == R.id.chipBy0) LIST_FILTER = 0;
-            if (group.getCheckedChipId() == R.id.chipBy1) LIST_FILTER = 1;
-            if (group.getCheckedChipId() == R.id.chipBy2) LIST_FILTER = 2;
-            if (group.getCheckedChipId() == R.id.chipBy3) LIST_FILTER = 3;
-
-            prefs.edit().putInt(Data.PREFS_KEY_LIST_FILTER, LIST_FILTER).apply();
-
-            new Handler().postDelayed(this::updateList, 50);
-        });
 
         uninstallAppLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
@@ -241,9 +253,13 @@ public class MainActivity extends AppCompatActivity {
             APP_PACKAGE_REMOVE = "";
         });
 
+        loadAndroidVersions(Data.readInputStream(getResources().openRawResource(R.raw.android_versions)));
+    }
+
+    void loadAndroidVersions(String json) {
         Executors.newSingleThreadExecutor().submit(() -> {
             try {
-                JSONArray jsonArray = new JSONArray(Data.readInputStream(getResources().openRawResource(R.raw.android_versions)));
+                JSONArray jsonArray = new JSONArray(json);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     String version = Objects.requireNonNull(jsonArray.getJSONArray(i).getString(0));
                     String codename = Objects.requireNonNull(jsonArray.getJSONArray(i).getString(1));
@@ -255,6 +271,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             } catch (Exception ignore) {}
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        getOnBackPressedDispatcher().onBackPressed();
+        return true;
     }
 
     private void addToRecent(String string) {
@@ -270,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
         return super.getOnBackInvokedDispatcher();
     }
 
-    void updateList() {
+    Runnable updateList() {
         Executors.newSingleThreadExecutor().submit(() -> {
             runOnUiThread(() -> {
                 progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
@@ -278,10 +300,7 @@ public class MainActivity extends AppCompatActivity {
                     recyclerView.animate().alpha(0f).setDuration(0).start();
                     recyclerView.scrollToPosition(0);
                 });
-                chipGroup.post(() -> {
-                    chipGroup.setEnabled(false);
-                    chipGroup.setClickable(false);
-                });
+
                 LOADING_APPS = true;
             });
 
@@ -303,12 +322,11 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setList(list);
                 progressBar.post(() -> progressBar.animate().alpha(0f).setDuration(200).start());
                 recyclerView.post(() -> recyclerView.animate().alpha(1f).setDuration(200).start());
-                chipGroup.post(() -> {
-                    chipGroup.setEnabled(true);
-                    chipGroup.setClickable(true);
-                });
+
                 LOADING_APPS = false;
             });
         });
+
+        return null;
     }
 }
