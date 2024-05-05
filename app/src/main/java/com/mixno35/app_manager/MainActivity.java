@@ -42,6 +42,7 @@ import com.mixno35.app_manager.model.AndroidModel;
 import com.mixno35.app_manager.model.AppModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
@@ -82,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
     RecentAdapter adapterRecent;
     List<String> listRecent = new ArrayList<>();
 
+    String LIST_RECENT_STRING;
+
     public static Boolean APK_SHARE_HIDDEN = false;
 
     @SuppressLint("MissingInflatedId")
@@ -89,16 +92,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) EdgeToEdge.enable(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            EdgeToEdge.enable(this);
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         APP_PACKAGE_REMOVE = "";
         LIST_FILTER = prefs.getInt(Data.PREFS_KEY_LIST_FILTER, 0);
+        LIST_RECENT_STRING = prefs.getString(Data.PREFS_KEY_LIST_RECENT, "");
         LOADING_APPS = false;
         RECYCLER_SCROLLING = false;
         AppDetailDialog.isOpened = false;
+        listRecent = Arrays.asList(LIST_RECENT_STRING.split("::::"));
 
         appBarLayout = findViewById(R.id.appBarLayout);
         recyclerView = findViewById(R.id.recyclerView);
@@ -283,6 +290,12 @@ public class MainActivity extends AppCompatActivity {
     private void addToRecent(String string) {
         if (!adapterRecent.isItemContains(string)) {
             listRecent.add(string);
+            /*if (LIST_RECENT_STRING.trim().isEmpty()) {
+                LIST_RECENT_STRING = string;
+            } else {
+                LIST_RECENT_STRING = LIST_RECENT_STRING + "::::" + string;
+            }
+            prefs.edit().putString(Data.PREFS_KEY_LIST_RECENT, LIST_RECENT_STRING).apply();*/
         }
     }
 

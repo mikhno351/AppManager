@@ -39,6 +39,7 @@ public class Data {
             return context.getPackageName() + "_preferences";
     }
     public static String PREFS_KEY_LIST_FILTER = "list_filter";
+    public static String PREFS_KEY_LIST_RECENT = "list_recent";
     public static String PREFS_KEY_SHARE_APK_HIDDEN = "sh_ap_hid";
 
     static String GOOGLE_PLAY_APP_LINK = "https://play.google.com/store/apps/details?id=%20";
