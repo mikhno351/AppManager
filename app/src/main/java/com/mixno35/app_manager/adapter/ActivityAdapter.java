@@ -88,6 +88,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Adapte
 
         public AdapterHolder(View item) {
             super(item);
+            titleTextView = item.findViewById(R.id.titleTextView);
             valueTextView = item.findViewById(R.id.valueTextView);
             detailTextView = item.findViewById(R.id.detailTextView);
         }

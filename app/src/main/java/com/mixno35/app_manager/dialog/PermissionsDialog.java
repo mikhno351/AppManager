@@ -19,6 +19,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textview.MaterialTextView;
 import com.mixno35.app_manager.R;
 import com.mixno35.app_manager.adapter.PermissionAdapter;
+import com.mixno35.app_manager.data.AppData;
 import com.mixno35.app_manager.model.PermissionModel;
 import com.mixno35.app_manager.utils.PermissionUtils;
 
@@ -61,7 +62,7 @@ public class PermissionsDialog {
             try {
                 list.clear();
 
-                PackageInfo packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
+                PackageInfo packageInfo = AppData.getPackageInfo(packageManager, packageName, PackageManager.GET_PERMISSIONS);
                 String[] permissions = packageInfo.requestedPermissions;
 
                 for (int i = 0; i < permissions.length; i++) {

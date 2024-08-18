@@ -13,13 +13,19 @@
         android:fitsSystemWindows="true"
         app:liftOnScroll="true">
 
-        <com.google.android.material.search.SearchBar
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="@string/hint_search"
-            android:id="@+id/searchBar"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-            app:menu="@menu/main_menu"/>
+            android:layout_height="70dp"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+
+            <com.google.android.material.search.SearchBar
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/hint_search"
+                android:id="@+id/searchBar"
+                app:menu="@menu/main_menu"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
@@ -27,8 +33,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             app:tabMode="scrollable"
-            app:tabGravity="fill"
-            app:tabUnboundedRipple="true"/>
+            app:tabGravity="fill"/>
 
         <View
             android:layout_width="match_parent"
@@ -37,29 +42,11 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:scrollbars="none"
-        android:alpha="0"
-        android:id="@+id/recyclerView"/>
-
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="64dp"
-        android:indeterminate="true"
-        app:trackCornerRadius="100dp"
-        android:alpha="0"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <com.google.android.material.search.SearchView
         android:id="@+id/searchView"

@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.mixno35.app_manager.data.AppData;
 import com.mixno35.app_manager.data.Data;
 import com.mixno35.app_manager.fragment.details.BaseFragment;
 
@@ -88,7 +89,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         try {
-            PackageInfo packageInfo = packageManager.getPackageInfo(Objects.requireNonNull(packageName), 0);
+            PackageInfo packageInfo = AppData.getPackageInfo(packageManager, packageName, 0);
 
             ViewCompat.setTransitionName(appIcon, "sharedImage");
 

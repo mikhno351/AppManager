@@ -61,9 +61,15 @@ public class ResourcesDialog {
             });
 
             try {
-                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
+                String pathApk;
+                if (new File(packageName).isFile()) {
+                    pathApk = new File(packageName).getAbsolutePath();
+                } else {
+                    ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
+                    pathApk = applicationInfo.sourceDir;
+                }
 
-                ZipFile apkZipFile = new ZipFile(new File(applicationInfo.sourceDir));
+                ZipFile apkZipFile = new ZipFile(new File(pathApk));
 
                 Enumeration<? extends ZipEntry> entries = apkZipFile.entries();
                 while (entries.hasMoreElements()) {

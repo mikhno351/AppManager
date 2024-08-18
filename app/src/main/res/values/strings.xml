@@ -72,6 +72,7 @@
     <string name="message_package_usage_stats_size">Permission is required to see the size of the applications.</string>
     <string name="message_prefs_changed">You have changed an important setting, in order for it to be applied, you need to restart the application. Are you ready to do it now?</string>
     <string name="message_apk_extracted_hidden">The file \"%1s\" has been successfully extracted, now you can share it</string>
+    <string name="message_view_apk">You are viewing information about an uninstalled application.</string>
 
     <string name="toast_app_not_deleted">The application has not been deleted.</string>
     <string name="toast_unknown_data_deleted">We were unable to process the deletion request inside the application.</string>
@@ -93,6 +94,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_open_app">Open</string>
     <string name="action_delete_app">Delete</string>
+    <string name="action_delete_extracted_apk">Delete extracted APK</string>
     <string name="action_settings_app">Manage</string>
     <string name="action_stop_app">Stop</string>
     <string name="action_share_app">Extract APK</string>

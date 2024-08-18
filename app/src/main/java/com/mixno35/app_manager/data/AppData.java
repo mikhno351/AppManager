@@ -26,6 +26,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class AppData {
 
@@ -253,5 +254,13 @@ public class AppData {
 
     Uri uriFromFile(Context context, File file) {
         return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", file);
+    }
+
+    public static PackageInfo getPackageInfo(@NotNull PackageManager packageManager, String packageName, int flags) throws PackageManager.NameNotFoundException {
+        if (new File(packageName).isFile()) {
+            return packageManager.getPackageArchiveInfo(Objects.requireNonNull(packageName), flags);
+        } else {
+            return packageManager.getPackageInfo(Objects.requireNonNull(packageName), flags);
+        }
     }
 }

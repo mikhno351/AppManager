@@ -1,10 +1,7 @@
 package com.mixno35.app_manager.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +21,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AdapterHolder> {
 
     ArrayList<AppModel> list;
     Context context;
-    SharedPreferences prefs;
 
     @SuppressLint("NotifyDataSetChanged")
     public void setList(@NonNull ArrayList<AppModel> list) {
@@ -33,10 +29,9 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AdapterHolder> {
         this.notifyDataSetChanged();
     }
 
-    public AppAdapter(@NonNull ArrayList<AppModel> list, @NonNull Context context, @NonNull SharedPreferences prefs) {
+    public AppAdapter(@NonNull ArrayList<AppModel> list, @NonNull Context context) {
         this.list = list;
         this.context = context;
-        this.prefs = prefs;
     }
 
     @NonNull

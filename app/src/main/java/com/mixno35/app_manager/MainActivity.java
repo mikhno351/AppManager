@@ -2,13 +2,15 @@ package com.mixno35.app_manager;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +26,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
 
@@ -32,13 +35,13 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.mixno35.app_manager.adapter.AppAdapter;
 import com.mixno35.app_manager.data.AppData;
 import com.mixno35.app_manager.data.Data;
 import com.mixno35.app_manager.dialog.AppDetailDialog;
+import com.mixno35.app_manager.fragment.AppsFragment;
 import com.mixno35.app_manager.model.AndroidModel;
 import com.mixno35.app_manager.model.AppModel;
 import com.mixno35.app_manager.tab.Tab;
@@ -53,32 +56,25 @@ import org.json.JSONArray;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<AppModel> list = new ArrayList<>();
     ArrayList<AppModel> listSearch = new ArrayList<>();
 
-    AppAdapter adapter;
     AppAdapter adapterSearch;
 
-    CircularProgressIndicator progressBar, progressBarSearch;
+    CircularProgressIndicator progressBarSearch;
     MaterialToolbar toolbar;
     SearchBar searchBar;
     SearchView searchView;
     AppBarLayout appBarLayout;
     MaterialTextView nothingSearchTextView;
 
+    FrameLayout frameLayout;
+
     TabLayout tabLayout;
 
     ExecutorService executorSingleAndroidVersions;
-    ExecutorService executorSingleLoadApps;
     ExecutorService executorSingleSearchApps;
 
-    RecyclerView recyclerView, recyclerViewSearch;
-    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this) {
-        @Override
-        public int scrollVerticallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
-            return super.scrollVerticallyBy(dx, recycler, state);
-        }
-    };
+    RecyclerView recyclerViewSearch;
 
     private final ArrayList<Tab> arrayTabs = new ArrayList<>();
 
@@ -105,33 +101,22 @@ public class MainActivity extends AppCompatActivity {
         AppDetailDialog.isOpened = false;
 
         appBarLayout = findViewById(R.id.appBarLayout);
-        recyclerView = findViewById(R.id.recyclerView);
         recyclerViewSearch = findViewById(R.id.recyclerViewSearch);
-        progressBar = findViewById(R.id.progressBar);
         progressBarSearch = findViewById(R.id.progressBarSearch);
         searchBar = findViewById(R.id.searchBar);
         searchView = findViewById(R.id.searchView);
         tabLayout = findViewById(R.id.tabLayout);
         nothingSearchTextView = findViewById(R.id.nothingSearchTextView);
-        
-        adapter = new AppAdapter(list, this, prefs);
-        adapterSearch = new AppAdapter(listSearch, this, prefs);
+        frameLayout = findViewById(R.id.frameLayout);
 
-        if (recyclerView != null) {
-            recyclerView.setLayoutManager(linearLayoutManager);
-            recyclerView.setAdapter(adapter);
-            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                }
-            });
-        } if (recyclerViewSearch != null) {
+        adapterSearch = new AppAdapter(listSearch, this);
+
+        if (recyclerViewSearch != null) {
             recyclerViewSearch.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
             recyclerViewSearch.setAdapter(adapterSearch);
         }
 
-        loadApps("default");
+        openFragment(new AppsFragment("default"));
         loadAndroidVersions(Data.readInputStream(getResources().openRawResource(R.raw.android_versions)));
 
         if (toolbar != null) {
@@ -250,11 +235,7 @@ public class MainActivity extends AppCompatActivity {
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
-                    if (recyclerView != null) {
-                        recyclerView.post(() -> recyclerView.stopScroll());
-                    }
-
-                    new Handler().postDelayed(() -> loadApps(arrayTabs.get(tab.getPosition()).getRunnable()), 100);
+                    new Handler().postDelayed(() -> openFragment(new AppsFragment(arrayTabs.get(tab.getPosition()).getRunnable())), 100);
                 }
 
                 @Override
@@ -287,26 +268,6 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-
-        if (recyclerView != null) {
-            ViewCompat.setOnApplyWindowInsetsListener(recyclerView, (v, windowInsets) -> {
-                Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-                v.setPadding(insets.left, 0, insets.right, insets.bottom);
-
-                return WindowInsetsCompat.CONSUMED;
-            });
-        }
-
-        uninstallAppLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == RESULT_OK) {
-                if (!APP_PACKAGE_REMOVE.trim().isEmpty()) {
-                    Snackbar.make(recyclerView, String.format(getString(R.string.toast_app_deleted), APP_PACKAGE_REMOVE), Snackbar.LENGTH_LONG).show();
-                    runOnUiThread(() -> adapter.notifyItemRemoved(new AppData().removeAppByPackage(list, APP_PACKAGE_REMOVE)));
-                }
-            } else Snackbar.make(recyclerView, getString(R.string.toast_app_not_deleted), Snackbar.LENGTH_LONG).show();
-
-            APP_PACKAGE_REMOVE = "";
-        });
     }
 
     @Override
@@ -315,8 +276,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (executorSingleAndroidVersions != null && !executorSingleAndroidVersions.isShutdown()) {
             executorSingleAndroidVersions.shutdownNow();
-        } if (executorSingleLoadApps != null && !executorSingleLoadApps.isShutdown()) {
-            executorSingleLoadApps.shutdownNow();
         }
     }
 
@@ -352,58 +311,13 @@ public class MainActivity extends AppCompatActivity {
         } return super.getOnBackInvokedDispatcher();
     }
 
-    void loadApps(@NotNull String rn) {
-        if (executorSingleLoadApps != null && !executorSingleLoadApps.isShutdown()) {
-            executorSingleLoadApps.shutdownNow();
+    void openFragment(@NotNull Fragment fragment) {
+        if (frameLayout != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            fragmentTransaction.replace(frameLayout.getId(), fragment);
+            fragmentTransaction.commit();
         }
-        executorSingleLoadApps = Executors.newSingleThreadExecutor();
-        executorSingleLoadApps.submit(() -> {
-            runOnUiThread(() -> {
-                if (progressBar != null) {
-                    progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
-                } if (recyclerView != null) {
-                    recyclerView.post(() -> {
-                        recyclerView.animate().alpha(0f).setDuration(0).start();
-                        recyclerView.scrollToPosition(0);
-                    });
-                } if (tabLayout != null) {
-                    tabLayout.setClickable(false);
-                    tabLayout.setEnabled(false);
-                }
-            });
-
-            list.clear();
-
-            PackageManager packageManager = getPackageManager();
-
-            try {
-                if (rn.equalsIgnoreCase("default")) {
-                    list.addAll(new AppData().get_arrayAppsUser(packageManager));
-                } else if (rn.equalsIgnoreCase("system")) {
-                    list.addAll(new AppData().get_arrayAppsSystem(packageManager));
-                } else if (rn.equalsIgnoreCase("google_play")) {
-                    list.addAll(new AppData().get_arrayAppsGooglePlay(getApplicationContext(), packageManager));
-                } else if (rn.equalsIgnoreCase("all")) {
-                    list.addAll(new AppData().get_arrayAppsAll(packageManager));
-                }
-            } catch (Exception ignored) {}
-
-            runOnUiThread(() -> {
-                try {
-                    adapter.setList(list);
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-
-                if (progressBar != null) {
-                    progressBar.post(() -> progressBar.animate().alpha(0f).setDuration(200).start());
-                } if (recyclerView != null) {
-                    recyclerView.post(() -> recyclerView.animate().alpha(1f).setDuration(200).start());
-                } if (tabLayout != null) {
-                    tabLayout.setClickable(true);
-                    tabLayout.setEnabled(true);
-                }
-            });
-        });
     }
 }

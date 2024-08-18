@@ -49,7 +49,7 @@ public class BaseFragment extends Fragment {
     String packageName = "";
 
     RecyclerView recyclerView, recyclerViewMenu;
-    LinearLayoutCompat containerUsageStatsSize;
+    LinearLayoutCompat containerUsageStatsSize, containerViewApk;
     ConstraintLayout containerSize;
     MaterialButton buttonProvide;
     MaterialTextView textSizeApp, textSizeData, textSizeCache;
@@ -69,6 +69,8 @@ public class BaseFragment extends Fragment {
     ExecutorService executorSingleSizeApp;
     ExecutorService executorSingleInfoApp;
 
+    File fileApk;
+
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,9 +85,12 @@ public class BaseFragment extends Fragment {
             packageName = requireActivity().getPackageName();
         }
 
+        fileApk = new File(packageName);
+
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerViewMenu = view.findViewById(R.id.recyclerViewMenu);
         containerUsageStatsSize = view.findViewById(R.id.containerUsageStatsSize);
+        containerViewApk = view.findViewById(R.id.containerViewApk);
         containerSize = view.findViewById(R.id.containerSize);
         buttonProvide = view.findViewById(R.id.buttonProvide);
         textSizeApp = view.findViewById(R.id.textSizeApp);
@@ -97,6 +102,8 @@ public class BaseFragment extends Fragment {
         if (recyclerViewMenu != null) {
             recyclerViewMenu.setLayoutManager(new GridLayoutManager(requireActivity(), 4));
             recyclerViewMenu.addItemDecoration(new GridSpacingItemDecoration(60, 4));
+        } if (containerViewApk != null) {
+            containerViewApk.post(() -> containerViewApk.setVisibility(fileApk.isFile() ? View.VISIBLE : View.GONE));
         }
 
         adapter = new DetailInfoAdapter(list, requireActivity());
@@ -104,7 +111,7 @@ public class BaseFragment extends Fragment {
         buttonProvide.setOnClickListener(v -> Data.requestUsageStatsPermission(usageStatsLauncher));
 
         try {
-            PackageInfo packageInfo = packageManager.getPackageInfo(Objects.requireNonNull(packageName), 0);
+            PackageInfo packageInfo = AppData.getPackageInfo(packageManager, packageName, 0);
 
             list_menu.clear();
             list.clear();
@@ -137,11 +144,15 @@ public class BaseFragment extends Fragment {
                         list.add(new DetailInfoModel(getString(R.string.text_app_version), Objects.requireNonNull(packageInfo.versionName), 0, null, null));
                     } catch (Exception ignored) {} try {
                         list.add(new DetailInfoModel(getString(R.string.text_app_version_code), Objects.requireNonNull(String.valueOf(packageInfo.versionCode)), 0, null, null));
-                    } catch (Exception ignored) {} try {
-                        list.add(new DetailInfoModel(getString(R.string.text_app_install_time), Objects.requireNonNull(Data.convertTimestampToDateTime(requireActivity(), packageInfo.firstInstallTime)), 0, null, null));
-                    } catch (Exception ignored) {} try {
-                        list.add(new DetailInfoModel(getString(R.string.text_app_update_time), Objects.requireNonNull(Data.convertTimestampToDateTime(requireActivity(), packageInfo.lastUpdateTime)), 0, null, null));
-                    } catch (Exception ignored) {} try {
+                    } catch (Exception ignored) {}
+                    if (!fileApk.isFile()) {
+                        try {
+                            list.add(new DetailInfoModel(getString(R.string.text_app_install_time), Objects.requireNonNull(Data.convertTimestampToDateTime(requireActivity(), packageInfo.firstInstallTime)), 0, null, null));
+                        } catch (Exception ignored) {} try {
+                            list.add(new DetailInfoModel(getString(R.string.text_app_update_time), Objects.requireNonNull(Data.convertTimestampToDateTime(requireActivity(), packageInfo.lastUpdateTime)), 0, null, null));
+                        } catch (Exception ignored) {}
+                    }
+                    try {
                         list.add(new DetailInfoModel(getString(R.string.text_app_provenance), Objects.requireNonNull(new AppData().getProvenance(requireActivity(), packageManager, packageName)), 0, null, null));
                     } catch (Exception ignored) {} try {
                         list.add(new DetailInfoModel(getString(R.string.text_app_developer), app_developer, R.drawable.baseline_content_copy_24, v -> Data.copyToClipboard(requireActivity(), app_developer), requireActivity().getString(R.string.text_copy_to_clipboard)));
@@ -194,10 +205,16 @@ public class BaseFragment extends Fragment {
         executorSingleSizeApp = Executors.newSingleThreadExecutor();
         executorSingleSizeApp.submit(() -> {
             requireActivity().runOnUiThread(() -> {
-                if (containerUsageStatsSize != null) {
-                    containerUsageStatsSize.setVisibility(Data.hasUsageStatsPermission(requireActivity()) ? View.GONE : View.VISIBLE);
-                } if (containerSize != null) {
-                    containerSize.setVisibility(Data.hasUsageStatsPermission(requireActivity()) ? View.VISIBLE : View.GONE);
+                if (fileApk.isFile()) {
+                    if (containerUsageStatsSize != null) {
+                        containerUsageStatsSize.setVisibility(View.GONE);
+                    }
+                } else {
+                    if (containerUsageStatsSize != null) {
+                        containerUsageStatsSize.setVisibility(Data.hasUsageStatsPermission(requireActivity()) ? View.GONE : View.VISIBLE);
+                    } if (containerSize != null) {
+                        containerSize.setVisibility(Data.hasUsageStatsPermission(requireActivity()) ? View.VISIBLE : View.GONE);
+                    }
                 }
             });
 
@@ -210,6 +227,10 @@ public class BaseFragment extends Fragment {
                     textSizeData.post(() -> textSizeData.setText(Formatter.formatFileSize(requireContext(), appSize.get(1))));
                 } if (textSizeCache != null) {
                     textSizeCache.post(() -> textSizeCache.setText(Formatter.formatFileSize(requireContext(), appSize.get(0))));
+                }
+
+                if (fileApk.isFile()) {
+                    textSizeApp.post(() -> textSizeApp.setText(Formatter.formatFileSize(requireContext(), fileApk.length())));
                 }
             });
         });

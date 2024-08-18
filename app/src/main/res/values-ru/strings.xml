@@ -108,4 +108,6 @@
     <string name="developer_vk">ВКонтакте</string>
     <string name="action_extracted_apps">Извлеченные APK</string>
     <string name="toast_allow_unknown_sources">Разрешите установку из неизвестных источников</string>
+    <string name="action_delete_extracted_apk">Удалить извлеченный APK</string>
+    <string name="message_view_apk">Вы просматриваете информацию об неустановленном приложении.</string>
 </resources>

@@ -21,6 +21,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textview.MaterialTextView;
 import com.mixno35.app_manager.R;
 import com.mixno35.app_manager.adapter.ActivityAdapter;
+import com.mixno35.app_manager.data.AppData;
 import com.mixno35.app_manager.model.ActivityModel;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class ActivitiesDialog {
             });
 
             try {
-                PackageInfo packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+                PackageInfo packageInfo = AppData.getPackageInfo(packageManager, packageName, PackageManager.GET_ACTIVITIES);
 
                 for (ActivityInfo activity : packageInfo.activities) {
                     if (activity != null) {
