@@ -37,6 +37,7 @@
     <string name="action_share_app">Поделиться</string>
     <string name="hint_search">Поиск приложений</string>
     <string name="contentDescription_app_icon">Иконка приложения</string>
+    <string name="action_find_in_rustore_app">Искать в RuStore</string>
     <string name="action_details_app">Подробнее</string>
     <string name="text_app_name">Имя приложения</string>
     <string name="text_app_package">Имя пакета</string>
@@ -60,6 +61,8 @@
     <string name="text_source_dir">Исходный каталог</string>
     <string name="text_default">По умолчанию</string>
     <string name="text_time_minute">м</string>
+    <string name="text_app_developer">Разработчик (информация может быть неверной)</string>
+    <string name="text_unknown">Неизвестно</string>
     <string name="provenance_user">Установщик</string>
     <string name="provenance_system">Система</string>
     <string name="text_min_sdk">Минимальная версия SDK (API)</string>
@@ -91,4 +94,14 @@
     <string name="message_app_no_require_activities">Это приложение не содержит никаких доступных активностей</string>
     <string name="text_apk_extracted_hidden">APK файл успешно извлечен</string>
     <string name="message_apk_extracted_hidden">Файл \"%1s\" успешно извлечен, теперь вы можете им поделиться</string>
+    <string name="text_user_applications_that_can_run">Пользовательские приложения, которые могут быть запущены</string>
+    <string name="text_user_system_applications_that_can_run">Пользовательские и системные приложения, которые могут быть запущены</string>
+    <string name="text_yes">Да</string>
+    <string name="text_no">Нет</string>
+    <string name="text_activity_enabled">Включен: %1s</string>
+    <string name="text_activity_exported">Доступен из вне: %1s</string>
+    <string name="text_permission_granded">Выдано: %1s</string>
+    <string name="text_nothing_not_found">Ничего не найдено</string>
+    <string name="developer_alexander_mikhno">Александр Михно</string>
+    <string name="developer_vk">ВКонтакте</string>
 </resources>

@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="48dp"
-                android:paddingBottom="24dp">
+                android:paddingBottom="16dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -96,7 +96,6 @@
                             android:scrollbars="vertical"
                             android:fadeScrollbars="false"
                             android:scrollbarStyle="outsideOverlay"
-                            android:letterSpacing="-.02"
                             tools:ignore="HardcodedText" />
 
                         <com.google.android.material.textview.MaterialTextView
@@ -110,7 +109,6 @@
                             android:ellipsize="middle"
                             android:scrollbars="vertical"
                             android:fadeScrollbars="false"
-                            android:letterSpacing="-.02"
                             android:scrollbarStyle="outsideOverlay"
                             tools:ignore="HardcodedText" />
 

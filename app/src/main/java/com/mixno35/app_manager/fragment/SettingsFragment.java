@@ -30,7 +30,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         keyPrivacy = findPreference("keyPrivacy");
         keyTerms = findPreference("keyTerms");
 
-        if (keyAboutApp != null) keyAboutApp.setSummary(String.format("%1s\nv.%2s (%3s)", BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+        if (keyAboutApp != null) {
+            keyAboutApp.setSummary(String.format("%1s\nv.%2s (%3s)", BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+        }
     }
 
     @Override
@@ -52,9 +54,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             return true;
         } if (keyTerms != null && preference.getKey().equals(keyTerms.getKey())) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://doc-hosting.flycricket.io/app-manager-terms-of-use/86d949cf-4ada-4d98-8484-a00a85cb2a0a/terms")));
-            return true;
-        } if (keyAboutApp != null && preference.getKey().equals(keyAboutApp.getKey())) {
-            new AppDetailDialog(requireActivity(), requireActivity().getPackageName());
             return true;
         }
         return super.onPreferenceTreeClick(preference);

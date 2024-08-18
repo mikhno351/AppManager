@@ -24,11 +24,13 @@ import com.mixno35.app_manager.adapter.ActivityAdapter;
 import com.mixno35.app_manager.model.ActivityModel;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ActivitiesDialog {
 
     BottomSheetDialog dialog;
+    ExecutorService executorSingle;
 
     @SuppressLint({"InflateParams", "MissingInflatedId"})
     public ActivitiesDialog(@NonNull Context context, @NonNull PackageManager packageManager, @NonNull String packageName) {
@@ -47,7 +49,8 @@ public class ActivitiesDialog {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
 
-        Executors.newSingleThreadExecutor().submit(() -> {
+        executorSingle = Executors.newSingleThreadExecutor();
+        executorSingle.submit(() -> {
             ((Activity) context).runOnUiThread(() -> {
                 if (progressBar != null) {
                     progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
@@ -94,6 +97,12 @@ public class ActivitiesDialog {
         dialog = new BottomSheetDialog(context);
         dialog.setContentView(view);
         dialog.setCancelable(true);
+        dialog.setOnDismissListener((dialog1) -> {
+            dialog = null;
+            if (executorSingle != null && !executorSingle.isShutdown()) {
+                executorSingle.shutdownNow();
+            }
+        });
         dialog.show();
     }
 }

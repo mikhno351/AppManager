@@ -17,7 +17,7 @@ import com.mixno35.app_manager.model.MenuModel;
 
 import java.util.ArrayList;
 
-public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.AdapterHolder> {
+public class MenuVerticalAdapter extends RecyclerView.Adapter<MenuVerticalAdapter.AdapterHolder> {
 
     ArrayList<MenuModel> list;
     Context context;
@@ -28,21 +28,21 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.AdapterHolder>
         this.notifyDataSetChanged();
     }
 
-    public MenuAdapter(@NonNull ArrayList<MenuModel> list, @NonNull Context context) {
+    public MenuVerticalAdapter(@NonNull ArrayList<MenuModel> list, @NonNull Context context) {
         this.list = list;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public MenuAdapter.AdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_menu, parent, false);
+    public MenuVerticalAdapter.AdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_menu_vertical, parent, false);
         return new AdapterHolder(v);
     }
 
     @Override
     @SuppressLint("RecyclerView")
-    public void onBindViewHolder(@NonNull final MenuAdapter.AdapterHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MenuVerticalAdapter.AdapterHolder holder, int position) {
         final MenuModel model = list.get(position);
 
         holder.titleTextView.post(() -> holder.titleTextView.setText(model.get_title()));

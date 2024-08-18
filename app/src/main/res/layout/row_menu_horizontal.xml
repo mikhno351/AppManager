@@ -2,11 +2,11 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="52dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:paddingHorizontal="22dp"
-    android:background="?selectableItemBackground"
+    android:orientation="vertical"
+    android:paddingVertical="4dp"
+    android:background="?selectableItemBackgroundBorderless"
     android:gravity="center">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -23,9 +23,14 @@
         android:layout_height="wrap_content"
         android:text="Menu Item"
         android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="8sp"
+        android:autoSizeMaxTextSize="14sp"
+        android:autoSizeStepGranularity="2sp"
+        android:gravity="center_horizontal"
         android:singleLine="true"
         android:ellipsize="end"
-        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         tools:ignore="HardcodedText" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

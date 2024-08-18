@@ -40,9 +40,9 @@ public class Data {
     }
     public static String PREFS_KEY_LIST_FILTER = "list_filter";
     public static String PREFS_KEY_LIST_RECENT = "list_recent";
-    public static String PREFS_KEY_SHARE_APK_HIDDEN = "sh_ap_hid";
 
     static String GOOGLE_PLAY_APP_LINK = "https://play.google.com/store/apps/details?id=%20";
+    static String RUSTORE_APP_LINK = "https://apps.rustore.ru/app/%20";
 
     public static ArrayList<AndroidModel> ANDROID_VERSIONS = new ArrayList<>();
 
@@ -100,15 +100,6 @@ public class Data {
         return new DecimalFormat("#,##0.#").format(bytes / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 
-    public static String capitalizeFirstLetter(String input) {
-        if (input == null || input.isEmpty()) return input;
-
-        char firstChar = Character.toUpperCase(input.charAt(0));
-        String restOfString = input.substring(1);
-
-        return firstChar + restOfString;
-    }
-
     public static void copyToClipboard(@NonNull Context context, @NonNull String text) {
         ClipData clipData = ClipData.newPlainText(context.getPackageName() + ".clipboard", text);
 
@@ -121,6 +112,14 @@ public class Data {
     public static void openInGooglePlay(@NonNull Context context, @NonNull String packageName) {
         try {
             context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(GOOGLE_PLAY_APP_LINK.replace("%20", packageName))));
+        } catch (Exception e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void openInRuStore(@NonNull Context context, @NonNull String packageName) {
+        try {
+            context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(RUSTORE_APP_LINK.replace("%20", packageName))));
         } catch (Exception e) {
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }

@@ -23,6 +23,7 @@ import com.mixno35.app_manager.model.ResourceApkModel;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -30,6 +31,7 @@ import java.util.zip.ZipFile;
 public class ResourcesDialog {
 
     BottomSheetDialog dialog;
+    ExecutorService executorSingle;
 
     @SuppressLint({"InflateParams", "MissingInflatedId"})
     public ResourcesDialog(@NonNull Context context, @NonNull PackageManager packageManager, @NonNull String packageName) {
@@ -46,7 +48,8 @@ public class ResourcesDialog {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
 
-        Executors.newSingleThreadExecutor().submit(() -> {
+        executorSingle = Executors.newSingleThreadExecutor();
+        executorSingle.submit(() -> {
             ((Activity) context).runOnUiThread(() -> {
                 if (progressBar != null) {
                     progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
@@ -91,6 +94,12 @@ public class ResourcesDialog {
         dialog = new BottomSheetDialog(context);
         dialog.setContentView(view);
         dialog.setCancelable(true);
+        dialog.setOnDismissListener((dialog1) -> {
+            dialog = null;
+            if (executorSingle != null && !executorSingle.isShutdown()) {
+                executorSingle.shutdownNow();
+            }
+        });
         dialog.show();
     }
 }

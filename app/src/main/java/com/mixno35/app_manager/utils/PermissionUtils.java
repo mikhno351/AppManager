@@ -19,15 +19,15 @@ public class PermissionUtils {
 
     public static String getName(@NonNull PackageManager packageManager, @NonNull String permission) {
         String name = "";
-        String extract = extractPermissionName(permission).replace("_", " ");
+        String extract = TextUtils.capitalizeFirstLetter(extractPermissionName(permission).replace("_", " "));
 
         try {
             name = packageManager.getPermissionInfo(permission, PackageManager.GET_META_DATA).loadLabel(packageManager).toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) {}
 
-        if (name.equalsIgnoreCase(permission)) return extract;
+        if (name.equalsIgnoreCase(permission)) {
+            return extract;
+        }
 
         return name.trim().isEmpty() ? extract : name;
     }
@@ -38,9 +38,7 @@ public class PermissionUtils {
 
         try {
             description = Objects.requireNonNull(packageManager.getPermissionInfo(permission, PackageManager.GET_META_DATA).loadDescription(packageManager)).toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) {}
 
         return description.trim().isEmpty() ? default_str : description;
     }

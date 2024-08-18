@@ -23,11 +23,13 @@ import com.mixno35.app_manager.model.PermissionModel;
 import com.mixno35.app_manager.utils.PermissionUtils;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class PermissionsDialog {
 
     BottomSheetDialog dialog;
+    ExecutorService executorSingle;
 
     @SuppressLint({"InflateParams", "MissingInflatedId"})
     public PermissionsDialog(@NonNull Context context, @NonNull PackageManager packageManager, @NonNull String packageName) {
@@ -46,7 +48,8 @@ public class PermissionsDialog {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
 
-        Executors.newSingleThreadExecutor().submit(() -> {
+        executorSingle = Executors.newSingleThreadExecutor();
+        executorSingle.submit(() -> {
             ((Activity) context).runOnUiThread(() -> {
                 progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
                 recyclerView.post(() -> {
@@ -87,6 +90,12 @@ public class PermissionsDialog {
         dialog = new BottomSheetDialog(context);
         dialog.setContentView(view);
         dialog.setCancelable(true);
+        dialog.setOnDismissListener((dialog1) -> {
+            dialog = null;
+            if (executorSingle != null && !executorSingle.isShutdown()) {
+                executorSingle.shutdownNow();
+            }
+        });
         dialog.show();
     }
 }

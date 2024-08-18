@@ -66,23 +66,10 @@ public class DetailsFragment extends Fragment {
 
             list.clear();
 
-            File file_executed_apk = new File(requireActivity().getExternalFilesDir(null), packageInfo.packageName + ".apk");
-
             String app_sourceDir = Objects.requireNonNull(packageInfo.applicationInfo.sourceDir);
             String app_publicSourceDir = Objects.requireNonNull(packageInfo.applicationInfo.publicSourceDir);
 
-            int appMinSDK = packageInfo.applicationInfo.minSdkVersion;
-            int appTargetSDK = packageInfo.applicationInfo.targetSdkVersion;
-
             try {
-                list.add(new DetailInfoModel(getString(R.string.text_min_sdk), Objects.requireNonNull(AndroidUtils.getName(appMinSDK, "%a %v %c (%s)")), 0, null, null));
-            } catch (Exception e) {
-                e.printStackTrace();
-            } try {
-                list.add(new DetailInfoModel(getString(R.string.text_target_sdk), Objects.requireNonNull(AndroidUtils.getName(appTargetSDK, "%a %v %c (%s)")), 0, null, null));
-            } catch (Exception e) {
-                e.printStackTrace();
-            } try {
                 list.add(new DetailInfoModel(getString(R.string.text_backup_agent), Objects.requireNonNull(packageInfo.applicationInfo.backupAgentName), 0, null, null));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -96,10 +83,6 @@ public class DetailsFragment extends Fragment {
                 e.printStackTrace();
             } try {
                 list.add(new DetailInfoModel(getString(R.string.text_native_library_dir), Objects.requireNonNull(packageInfo.applicationInfo.nativeLibraryDir), 0, null, null));
-            } catch (Exception e) {
-                e.printStackTrace();
-            } try {
-                if (file_executed_apk.exists()) list.add(new DetailInfoModel(getString(R.string.text_executed_apk), file_executed_apk.getAbsolutePath(), R.drawable.baseline_share_24, v -> Data.shareFile(requireActivity(), file_executed_apk), requireActivity().getString(R.string.text_share_apk)));
             } catch (Exception e) {
                 e.printStackTrace();
             } try {

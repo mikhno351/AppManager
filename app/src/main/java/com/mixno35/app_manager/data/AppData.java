@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import com.mixno35.app_manager.MainActivity;
 import com.mixno35.app_manager.R;
 import com.mixno35.app_manager.model.AppModel;
+import com.mixno35.app_manager.utils.TextUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -97,12 +100,12 @@ public class AppData {
         return provenance;
     }
 
-    public ArrayList<AppModel> get_arrayAppsUser(@NonNull Context context, @NonNull PackageManager packageManager) {
+    public ArrayList<AppModel> get_arrayAppsUser(@NonNull PackageManager packageManager) {
         ArrayList<AppModel> list = new ArrayList<>();
         List<PackageInfo> packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA);
 
         for (PackageInfo info : packages) {
-            if (!isSystem(packageManager, info.packageName) && !info.packageName.equals(context.getPackageName())) list.add(new AppModel(
+            if (!isSystem(packageManager, info.packageName)) list.add(new AppModel(
                     info.packageName,
                     info.applicationInfo.loadLabel(packageManager).toString(),
                     info.applicationInfo.loadIcon(packageManager)
@@ -112,12 +115,12 @@ public class AppData {
         return list;
     }
 
-    public ArrayList<AppModel> get_arrayAppsSystem(@NonNull Context context, @NonNull PackageManager packageManager) {
+    public ArrayList<AppModel> get_arrayAppsSystem(@NonNull PackageManager packageManager) {
         ArrayList<AppModel> list = new ArrayList<>();
         List<PackageInfo> packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA);
 
         for (PackageInfo info : packages) {
-            if (isSystem(packageManager, info.packageName) && !info.packageName.equals(context.getPackageName())) list.add(new AppModel(
+            if (isSystem(packageManager, info.packageName)) list.add(new AppModel(
                     info.packageName,
                     info.applicationInfo.loadLabel(packageManager).toString(),
                     info.applicationInfo.loadIcon(packageManager)
@@ -132,7 +135,7 @@ public class AppData {
         List<PackageInfo> packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA);
 
         for (PackageInfo info : packages) {
-            if (isAppInstalledFromPlayStore(context, info.packageName) && !info.packageName.equals(context.getPackageName())) list.add(new AppModel(
+            if (isAppInstalledFromPlayStore(context, info.packageName)) list.add(new AppModel(
                     info.packageName,
                     info.applicationInfo.loadLabel(packageManager).toString(),
                     info.applicationInfo.loadIcon(packageManager)
@@ -153,8 +156,6 @@ public class AppData {
             arrayList.add(storageStats.getDataBytes());
             arrayList.add(storageStats.getAppBytes());
         } catch (Exception e) {
-            e.printStackTrace();
-
             arrayList.add(((long) 0));
             arrayList.add(((long) 0));
             arrayList.add(((long) 0));
@@ -163,18 +164,57 @@ public class AppData {
         return arrayList;
     }
 
-    public ArrayList<AppModel> get_arrayAppsAll(@NonNull Context context, @NonNull PackageManager packageManager) {
+    public ArrayList<AppModel> get_arrayAppsAll(@NonNull PackageManager packageManager) {
         ArrayList<AppModel> list = new ArrayList<>();
         List<PackageInfo> packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA);
 
         for (PackageInfo info : packages) {
-            if (!info.packageName.equals(context.getPackageName())) list.add(new AppModel(
-                    info.packageName,
-                    info.applicationInfo.loadLabel(packageManager).toString(),
-                    info.applicationInfo.loadIcon(packageManager)
-            ));
+            list.add(new AppModel(info.packageName, info.applicationInfo.loadLabel(packageManager).toString(), info.applicationInfo.loadIcon(packageManager)));
         }
 
         return list;
+    }
+
+    public ArrayList<AppModel> get_arrayAppsSearch(@NonNull PackageManager packageManager, @NonNull String text) {
+        ArrayList<AppModel> list = new ArrayList<>();
+        List<PackageInfo> packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA);
+
+        for (PackageInfo info : packages) {
+            String packageName = info.packageName.toLowerCase();
+            String appName = info.applicationInfo.loadLabel(packageManager).toString().toLowerCase();
+            String searchText = text.toLowerCase();
+
+            if (packageName.contains(searchText) || appName.contains(searchText)) {
+                list.add(new AppModel(info.packageName, info.applicationInfo.loadLabel(packageManager).toString(), info.applicationInfo.loadIcon(packageManager)));
+            }
+        }
+
+        return list;
+    }
+
+    public String getAppDeveloper(@NotNull Context context, @NonNull String packageName) {
+        String[] arr = packageName.split("\\.");
+        String result = context.getString(R.string.text_unknown);
+        if (arr.length >= 2) {
+            result = TextUtils.capitalizeFirstLetter(arr[1]);
+        }
+
+        if (packageName.startsWith("com.mixno35.")) {
+            result = context.getString(R.string.developer_alexander_mikhno);
+        } if (packageName.startsWith("com.code_element.vipapp.")) {
+            result = TextUtils.multipartDeveloper(context.getString(R.string.developer_vipapp), context.getString(R.string.developer_alexander_mikhno));
+        } if (packageName.equalsIgnoreCase("com.code_element.vipapp")) {
+            result = context.getString(R.string.developer_vipapp);
+        } if (packageName.startsWith("com.facebook.") || packageName.startsWith("com.whatsapp.") || packageName.equalsIgnoreCase("com.instagram.android")) {
+            result = context.getString(R.string.developer_meta);
+        } if (packageName.startsWith("com.twitter.")) {
+            result = context.getString(R.string.developer_x);
+        } if (packageName.startsWith("com.google.")) {
+            result = context.getString(R.string.developer_google);
+        } if (packageName.startsWith("ru.vk.") || packageName.startsWith("com.vkontakte.")) {
+            result = context.getString(R.string.developer_vk);
+        }
+
+        return result;
     }
 }

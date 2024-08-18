@@ -13,20 +13,13 @@
         android:fitsSystemWindows="true"
         app:liftOnScroll="true">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/contentSearchBar"
+        <com.google.android.material.search.SearchBar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
-
-            <com.google.android.material.search.SearchBar
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:hint="@string/hint_search"
-                android:id="@+id/searchBar"
-                app:menu="@menu/main_menu"/>
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
+            android:layout_height="50dp"
+            android:hint="@string/hint_search"
+            android:id="@+id/searchBar"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+            app:menu="@menu/main_menu"/>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
@@ -43,41 +36,6 @@
             android:background="?dividerVertical"/>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <com.google.android.material.search.SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="@string/hint_search"
-        android:stateListAnimator="@null"
-        app:layout_anchor="@id/searchBar"
-        app:searchPrefixText=" ">
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:text="@string/text_recent_requests"
-                android:paddingHorizontal="25dp"
-                android:paddingTop="12dp"
-                android:paddingBottom="6dp"
-                android:textStyle="bold"/>
-
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@null"
-                android:dividerHeight="0dp"
-                android:id="@+id/listViewRecent"/>
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-    </com.google.android.material.search.SearchView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
@@ -102,5 +60,55 @@
         android:indeterminate="true"
         app:trackCornerRadius="100dp"
         android:alpha="0"/>
+
+    <com.google.android.material.search.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_search"
+        android:stateListAnimator="@null"
+        app:backgroundTint="?attr/colorSurfaceContainer"
+        app:layout_anchor="@id/searchBar"
+        app:searchPrefixText=" ">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:id="@+id/recyclerViewSearch"/>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressBarSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="64dp"
+                android:layout_marginEnd="64dp"
+                android:layout_marginBottom="64dp"
+                android:indeterminate="true"
+                app:trackCornerRadius="100dp"
+                android:visibility="gone"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:text="@string/text_nothing_not_found"
+                android:gravity="center"
+                android:visibility="gone"
+                android:id="@+id/nothingSearchTextView"
+                tools:ignore="HardcodedText" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.search.SearchView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

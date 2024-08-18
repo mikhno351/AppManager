@@ -12,8 +12,8 @@ import androidx.appcompat.widget.AppCompatImageView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textview.MaterialTextView;
 import com.mixno35.app_manager.R;
-import com.mixno35.app_manager.data.Data;
 import com.mixno35.app_manager.utils.PermissionUtils;
+import com.mixno35.app_manager.utils.TextUtils;
 
 public class PermissionDetailDialog {
 
@@ -30,12 +30,13 @@ public class PermissionDetailDialog {
 
         iconPermission.post(() -> iconPermission.setImageResource(PermissionUtils.getIcon(permission)));
 
-        titleText.post(() -> titleText.setText(Data.capitalizeFirstLetter(PermissionUtils.getName(packageManager, permission))));
-        descriptionText.post(() -> descriptionText.setText(Data.capitalizeFirstLetter(PermissionUtils.getDescription(context, packageManager, permission))));
+        titleText.post(() -> titleText.setText(PermissionUtils.getName(packageManager, permission)));
+        descriptionText.post(() -> descriptionText.setText(PermissionUtils.getDescription(context, packageManager, permission)));
 
         dialog = new BottomSheetDialog(context);
         dialog.setContentView(view);
         dialog.setCancelable(true);
+        dialog.setOnDismissListener((dialog1) -> dialog = null);
         dialog.show();
     }
 }

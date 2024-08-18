@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -45,110 +46,108 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/containerSize"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingTop="24dp"
-                android:paddingBottom="8dp"
-                android:id="@+id/containerSize">
+                android:paddingVertical="24dp"
+                android:paddingHorizontal="4dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
+                    android:id="@+id/sizeAppContainer"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:background="@drawable/rounded_rectangle"
+                    android:orientation="vertical"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    app:layout_constraintEnd_toStartOf="@+id/sizeDataContainer"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.32">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:text="@string/text_size_app"
+                        android:textAppearance="@style/TextAppearance.Material3.LabelMedium" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/textSizeApp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="0.0MB"
                         android:textSize="18sp"
-                        tools:ignore="HardcodedText"
-                        android:id="@+id/textSizeApp"/>
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
-                        android:layout_marginTop="2dp"
-                        android:gravity="center"
-                        android:text="@string/text_size_app"/>
+                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        tools:ignore="HardcodedText" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="42dp"
-                    android:background="?dividerHorizontal"/>
-
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
+                    android:id="@+id/sizeDataContainer"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:background="@drawable/rounded_rectangle"
+                    android:orientation="vertical"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    app:layout_constraintEnd_toStartOf="@+id/sizeCacheContainer"
+                    app:layout_constraintStart_toEndOf="@+id/sizeAppContainer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.32">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:text="@string/text_size_data"
+                        android:textAppearance="@style/TextAppearance.Material3.LabelMedium" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/textSizeData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="0.0MB"
                         android:textSize="18sp"
-                        tools:ignore="HardcodedText"
-                        android:id="@+id/textSizeData"/>
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
-                        android:layout_marginTop="2dp"
-                        android:gravity="center"
-                        android:text="@string/text_size_data"/>
+                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        tools:ignore="HardcodedText" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="42dp"
-                    android:background="?dividerHorizontal"/>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:id="@+id/sizeCacheContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_rectangle"
+                    android:orientation="vertical"
                     android:gravity="center"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/sizeDataContainer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.32">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:text="@string/text_size_cache"
+                        android:textAppearance="@style/TextAppearance.Material3.LabelMedium" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/textSizeCache"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="0.0MB"
                         android:textSize="18sp"
-                        tools:ignore="HardcodedText"
-                        android:id="@+id/textSizeCache"/>
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
-                        android:layout_marginTop="2dp"
-                        android:gravity="center"
-                        android:text="@string/text_size_cache"/>
+                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        tools:ignore="HardcodedText" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/recyclerViewMenu"
-                android:paddingVertical="24dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="24dp"
                 android:paddingHorizontal="16dp"
                 android:nestedScrollingEnabled="false"/>
 

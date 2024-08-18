@@ -4,8 +4,8 @@
     <string name="text_unknown_app">Oops</string>
     <string name="text_aus">App Usage Service</string>
     <string name="text_auc">App Usage Channel</string>
-    <string name="text_user_applications_that_can_run" translatable="false">User applications that can be run</string>
-    <string name="text_user_system_applications_that_can_run" translatable="false">User and system applications that can be run</string>
+    <string name="text_user_applications_that_can_run">User applications that can be run</string>
+    <string name="text_user_system_applications_that_can_run">User and system applications that can be run</string>
     <string name="text_package_usage_stats">Usage stats</string>
     <string name="text_used_app">Used app %s</string>
     <string name="text_user_apps">User apps</string>
@@ -43,12 +43,15 @@
     <string name="text_time_hour">h</string>
     <string name="text_time_minute">m</string>
     <string name="text_time_second">s</string>
-    <string name="text_yes" translatable="false">Yes</string>
-    <string name="text_no" translatable="false">No</string>
-    <string name="text_activity_enabled" translatable="false">Enabled: %1s</string>
-    <string name="text_activity_exported" translatable="false">Exported: %1s</string>
-    <string name="text_permission_granded" translatable="false">Granded: %1s</string>
+    <string name="text_yes">Yes</string>
+    <string name="text_no">No</string>
+    <string name="text_activity_enabled">Enabled: %1s</string>
+    <string name="text_activity_exported">Exported: %1s</string>
+    <string name="text_permission_granded">Granded: %1s</string>
     <string name="text_apk_extracted_hidden">APK file was successfully extracted</string>
+    <string name="text_app_developer">Developer (the information may be incorrect)</string>
+    <string name="text_unknown">Unknown</string>
+    <string name="text_nothing_not_found">Nothing was found</string>
 
     <string name="provenance_user">Installer</string>
     <string name="provenance_system">System</string>
@@ -92,6 +95,7 @@
     <string name="action_stop_app">Stop</string>
     <string name="action_share_app">Share</string>
     <string name="action_find_in_gp_app">Find in Google Play</string>
+    <string name="action_find_in_rustore_app">Find in RuStore</string>
     <string name="action_details_app">Details</string>
     <string name="action_permissions_app">Permissions</string>
     <string name="action_manifest_app">Manifest</string>
@@ -114,4 +118,11 @@
     <string name="hint_search">Search apps</string>
 
     <string name="contentDescription_app_icon">App icon</string>
+
+    <string name="developer_alexander_mikhno">Alexander Mikhno</string>
+    <string name="developer_vipapp" translatable="false">• VIPAPP •</string>
+    <string name="developer_google" translatable="false">Google LLC</string>
+    <string name="developer_meta" translatable="false">Meta Platforms, Inc.</string>
+    <string name="developer_x" translatable="false">X.com</string>
+    <string name="developer_vk">VKontakte</string>
 </resources>

@@ -20,9 +20,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
 
@@ -33,37 +34,45 @@ import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textview.MaterialTextView;
 import com.mixno35.app_manager.adapter.AppAdapter;
-import com.mixno35.app_manager.adapter.RecentAdapter;
 import com.mixno35.app_manager.data.AppData;
 import com.mixno35.app_manager.data.Data;
 import com.mixno35.app_manager.dialog.AppDetailDialog;
 import com.mixno35.app_manager.model.AndroidModel;
 import com.mixno35.app_manager.model.AppModel;
+import com.mixno35.app_manager.tab.Tab;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 
 public class MainActivity extends AppCompatActivity {
 
     ArrayList<AppModel> list = new ArrayList<>();
+    ArrayList<AppModel> listSearch = new ArrayList<>();
+
     AppAdapter adapter;
-    CircularProgressIndicator progressBar;
+    AppAdapter adapterSearch;
+
+    CircularProgressIndicator progressBar, progressBarSearch;
     MaterialToolbar toolbar;
     SearchBar searchBar;
     SearchView searchView;
     AppBarLayout appBarLayout;
-
-    ListView listViewRecent;
+    MaterialTextView nothingSearchTextView;
 
     TabLayout tabLayout;
 
-    RecyclerView recyclerView;
+    ExecutorService executorSingleAndroidVersions;
+    ExecutorService executorSingleLoadApps;
+    ExecutorService executorSingleSearchApps;
+
+    RecyclerView recyclerView, recyclerViewSearch;
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this) {
         @Override
         public int scrollVerticallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
@@ -71,23 +80,16 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    boolean LOADING_APPS = false;
-    boolean RECYCLER_SCROLLING = false;
+    private final ArrayList<Tab> arrayTabs = new ArrayList<>();
 
-    int LIST_FILTER = 0;
     public static String APP_PACKAGE_REMOVE = "";
     public static ActivityResultLauncher<Intent> uninstallAppLauncher;
 
     SharedPreferences prefs;
 
-    RecentAdapter adapterRecent;
-    List<String> listRecent = new ArrayList<>();
-
-    String LIST_RECENT_STRING;
-
     public static Boolean APK_SHARE_HIDDEN = false;
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -100,89 +102,142 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         APP_PACKAGE_REMOVE = "";
-        LIST_FILTER = prefs.getInt(Data.PREFS_KEY_LIST_FILTER, 0);
-        LIST_RECENT_STRING = prefs.getString(Data.PREFS_KEY_LIST_RECENT, "");
-        LOADING_APPS = false;
-        RECYCLER_SCROLLING = false;
         AppDetailDialog.isOpened = false;
-        listRecent = Arrays.asList(LIST_RECENT_STRING.split("::::"));
 
         appBarLayout = findViewById(R.id.appBarLayout);
         recyclerView = findViewById(R.id.recyclerView);
+        recyclerViewSearch = findViewById(R.id.recyclerViewSearch);
         progressBar = findViewById(R.id.progressBar);
+        progressBarSearch = findViewById(R.id.progressBarSearch);
         searchBar = findViewById(R.id.searchBar);
         searchView = findViewById(R.id.searchView);
-        listViewRecent = findViewById(R.id.listViewRecent);
         tabLayout = findViewById(R.id.tabLayout);
+        nothingSearchTextView = findViewById(R.id.nothingSearchTextView);
         
         adapter = new AppAdapter(list, this, prefs);
+        adapterSearch = new AppAdapter(listSearch, this, prefs);
 
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                RECYCLER_SCROLLING = !(newState == RecyclerView.SCROLL_STATE_IDLE);
-            }
-        });
-
-        if (listViewRecent != null) {
-            adapterRecent = new RecentAdapter(this, listRecent);
-            listViewRecent.setAdapter(adapterRecent);
-            listViewRecent.setOnItemClickListener((parent, view, position, id) -> {
-                String text = Objects.requireNonNull(adapterRecent.getItem(position)).trim();
-
-                if (searchView != null) {
-                    searchView.setText(text);
-                    searchView.hide();
-                } if (searchBar != null) {
-                    searchBar.setText(text);
+        if (recyclerView != null) {
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.setAdapter(adapter);
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
                 }
-
-                adapter.getFilter().filter(text);
             });
+        } if (recyclerViewSearch != null) {
+            recyclerViewSearch.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            recyclerViewSearch.setAdapter(adapterSearch);
         }
 
-        updateList();
+        loadApps("default");
+        loadAndroidVersions(Data.readInputStream(getResources().openRawResource(R.raw.android_versions)));
 
-        if (toolbar != null) setSupportActionBar(toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
 
         if (searchView != null) {
+            if (searchBar != null) {
+                searchView.setupWithSearchBar(searchBar);
+            }
+
             searchView.getEditText().setOnEditorActionListener((v, actionId, event) -> {
-                String text = String.valueOf(searchView.getText()).trim();
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String text = String.valueOf(v.getText()).trim();
+                    if (!TextUtils.isEmpty(text)) {
+                        if (executorSingleSearchApps != null && !executorSingleSearchApps.isShutdown()) {
+                            executorSingleSearchApps.submit(() -> {
+                                runOnUiThread(() -> {
+                                    if (recyclerViewSearch != null) {
+                                        recyclerViewSearch.setVisibility(View.GONE);
+                                        recyclerViewSearch.setAlpha(0);
+                                    } if (progressBarSearch != null) {
+                                        progressBarSearch.setVisibility(View.VISIBLE);
+                                        progressBarSearch.setAlpha(1);
+                                    } if (nothingSearchTextView != null) {
+                                        nothingSearchTextView.setVisibility(View.GONE);
+                                        nothingSearchTextView.setAlpha(0);
+                                    }
+                                });
 
-                if (searchBar != null) {
-                    searchBar.setText(text);
+                                PackageManager packageManager = getPackageManager();
+
+                                listSearch.clear();
+
+                                listSearch.addAll(new AppData().get_arrayAppsSearch(packageManager, text));
+
+                                runOnUiThread(() -> {
+                                    try {
+                                        adapterSearch.setList(listSearch);
+                                    } catch (Exception e) {
+                                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    if (recyclerViewSearch != null) {
+                                        recyclerViewSearch.setVisibility(View.VISIBLE);
+                                        recyclerViewSearch.animate().alpha(1).start();
+                                    } if (progressBarSearch != null) {
+                                        progressBarSearch.setVisibility(View.GONE);
+                                        progressBarSearch.setAlpha(0);
+                                    } if (nothingSearchTextView != null && adapterSearch.getItemCount() == 0) {
+                                        nothingSearchTextView.setVisibility(View.VISIBLE);
+                                        nothingSearchTextView.animate().alpha(1).start();
+                                    }
+                                });
+                            });
+                        }
+                    }
                 }
 
-                adapter.getFilter().filter(text);
-                searchView.hide();
-
-                if (searchView.getText().length() >= 2) {
-                    addToRecent(text);
-                }
-
-                return false;
+                return true;
             });
 
             searchView.addTransitionListener((searchView, previousState, newState) -> {
-                if (newState == SearchView.TransitionState.SHOWING) {
-                    adapterRecent.notifyDataSetChanged();
+                if (newState == SearchView.TransitionState.SHOWN) {
+                    executorSingleSearchApps = Executors.newSingleThreadExecutor();
+                } if (newState == SearchView.TransitionState.HIDDEN) {
+                    listSearch.clear();
+                    adapterSearch.notifyDataSetChanged();
+                    if (executorSingleSearchApps != null && !executorSingleSearchApps.isShutdown()) {
+                        executorSingleSearchApps.shutdownNow();
+                    } if (progressBarSearch != null) {
+                        progressBarSearch.setVisibility(View.GONE);
+                        progressBarSearch.setAlpha(0);
+                    } if (recyclerViewSearch != null) {
+                        recyclerViewSearch.setVisibility(View.GONE);
+                        recyclerViewSearch.setAlpha(0);
+                    } if (nothingSearchTextView != null) {
+                        nothingSearchTextView.setVisibility(View.GONE);
+                        nothingSearchTextView.setAlpha(0);
+                    }
                 }
             });
         }
 
-        if (searchView != null && searchBar != null) {
-            searchView.setupWithSearchBar(searchBar);
+        if (recyclerViewSearch != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(recyclerViewSearch, (v, windowInsets) -> {
+                Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+                recyclerViewSearch.setPadding(insets.left, 0, insets.right, insets.bottom);
+
+                return WindowInsetsCompat.CONSUMED;
+            });
         }
 
         if (tabLayout != null) {
-            tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.text_user_apps)));
-            tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.text_system_apps)));
-            tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.text_google_play)));
-            tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.text_all_apps)));
+            arrayTabs.clear();
+
+            arrayTabs.add(new Tab(tabLayout, getString(R.string.text_user_apps), "default"));
+            arrayTabs.add(new Tab(tabLayout, getString(R.string.text_system_apps), "system"));
+            if (!BuildConfig.IS_RUSTORE) {
+                arrayTabs.add(new Tab(tabLayout, getString(R.string.text_google_play), "google_play"));
+            }
+            arrayTabs.add(new Tab(tabLayout, getString(R.string.text_all_apps), "all"));
+
+            for (Tab tab : arrayTabs) {
+                tabLayout.addTab(tab.getTab());
+            }
 
             ViewCompat.setOnApplyWindowInsetsListener(tabLayout, (v, windowInsets) -> {
                 Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -192,20 +247,14 @@ public class MainActivity extends AppCompatActivity {
                 return WindowInsetsCompat.CONSUMED;
             });
 
-            Objects.requireNonNull(tabLayout.getTabAt(LIST_FILTER)).select();
-            tabLayout.setScrollPosition(LIST_FILTER, 0f, true);
-
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
-                    if (LOADING_APPS) return;
-                    if (RECYCLER_SCROLLING) recyclerView.post(() -> recyclerView.stopScroll());
+                    if (recyclerView != null) {
+                        recyclerView.post(() -> recyclerView.stopScroll());
+                    }
 
-                    LIST_FILTER = tab.getPosition();
-
-                    prefs.edit().putInt(Data.PREFS_KEY_LIST_FILTER, LIST_FILTER).apply();
-
-                    new Handler().postDelayed(updateList(), 50);
+                    new Handler().postDelayed(() -> loadApps(arrayTabs.get(tab.getPosition()).getRunnable()), 100);
                 }
 
                 @Override
@@ -242,13 +291,6 @@ public class MainActivity extends AppCompatActivity {
 
             return WindowInsetsCompat.CONSUMED;
         });
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.contentSearchBar), (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            layoutParams.setMargins(insets.left, 0, insets.right, 0);
-
-            return WindowInsetsCompat.CONSUMED;
-        });
 
         uninstallAppLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
@@ -260,12 +302,22 @@ public class MainActivity extends AppCompatActivity {
 
             APP_PACKAGE_REMOVE = "";
         });
+    }
 
-        loadAndroidVersions(Data.readInputStream(getResources().openRawResource(R.raw.android_versions)));
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (executorSingleAndroidVersions != null && !executorSingleAndroidVersions.isShutdown()) {
+            executorSingleAndroidVersions.shutdownNow();
+        } if (executorSingleLoadApps != null && !executorSingleLoadApps.isShutdown()) {
+            executorSingleLoadApps.shutdownNow();
+        }
     }
 
     void loadAndroidVersions(String json) {
-        Executors.newSingleThreadExecutor().submit(() -> {
+        executorSingleAndroidVersions = Executors.newSingleThreadExecutor();
+        executorSingleAndroidVersions.submit(() -> {
             try {
                 JSONArray jsonArray = new JSONArray(json);
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -287,60 +339,66 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void addToRecent(String string) {
-        if (!adapterRecent.isItemContains(string)) {
-            listRecent.add(string);
-            /*if (LIST_RECENT_STRING.trim().isEmpty()) {
-                LIST_RECENT_STRING = string;
-            } else {
-                LIST_RECENT_STRING = LIST_RECENT_STRING + "::::" + string;
-            }
-            prefs.edit().putString(Data.PREFS_KEY_LIST_RECENT, LIST_RECENT_STRING).apply();*/
-        }
-    }
-
     @NonNull
     @Override
     public OnBackInvokedDispatcher getOnBackInvokedDispatcher() {
-        if (searchView != null && searchView.getCurrentTransitionState() == SearchView.TransitionState.SHOWING) searchView.hide();
-        return super.getOnBackInvokedDispatcher();
+        if (searchView != null && searchView.getCurrentTransitionState() == SearchView.TransitionState.SHOWN) {
+            Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_LONG).show();
+        } return super.getOnBackInvokedDispatcher();
     }
 
-    Runnable updateList() {
-        Executors.newSingleThreadExecutor().submit(() -> {
+    void loadApps(@NotNull String rn) {
+        if (executorSingleLoadApps != null && !executorSingleLoadApps.isShutdown()) {
+            executorSingleLoadApps.shutdownNow();
+        }
+        executorSingleLoadApps = Executors.newSingleThreadExecutor();
+        executorSingleLoadApps.submit(() -> {
             runOnUiThread(() -> {
-                progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
-                recyclerView.post(() -> {
-                    recyclerView.animate().alpha(0f).setDuration(0).start();
-                    recyclerView.scrollToPosition(0);
-                });
-
-                LOADING_APPS = true;
+                if (progressBar != null) {
+                    progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
+                } if (recyclerView != null) {
+                    recyclerView.post(() -> {
+                        recyclerView.animate().alpha(0f).setDuration(0).start();
+                        recyclerView.scrollToPosition(0);
+                    });
+                } if (tabLayout != null) {
+                    tabLayout.setClickable(false);
+                    tabLayout.setEnabled(false);
+                }
             });
 
             list.clear();
 
-            try {
-                PackageManager packageManager = getPackageManager();
+            PackageManager packageManager = getPackageManager();
 
-                if (LIST_FILTER == 0) list.addAll(new AppData().get_arrayAppsUser(getApplicationContext(), packageManager));
-                else if (LIST_FILTER == 1) list.addAll(new AppData().get_arrayAppsSystem(getApplicationContext(), packageManager));
-                else if (LIST_FILTER == 2) list.addAll(new AppData().get_arrayAppsGooglePlay(getApplicationContext(), packageManager));
-                else if (LIST_FILTER == 3) list.addAll(new AppData().get_arrayAppsAll(getApplicationContext(), packageManager));
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+            try {
+                if (rn.equalsIgnoreCase("default")) {
+                    list.addAll(new AppData().get_arrayAppsUser(packageManager));
+                } else if (rn.equalsIgnoreCase("system")) {
+                    list.addAll(new AppData().get_arrayAppsSystem(packageManager));
+                } else if (rn.equalsIgnoreCase("google_play")) {
+                    list.addAll(new AppData().get_arrayAppsGooglePlay(getApplicationContext(), packageManager));
+                } else if (rn.equalsIgnoreCase("all")) {
+                    list.addAll(new AppData().get_arrayAppsAll(packageManager));
+                }
+            } catch (Exception ignored) {}
 
             runOnUiThread(() -> {
-                Log.i("APPS", list.toString());
-                adapter.setList(list);
-                progressBar.post(() -> progressBar.animate().alpha(0f).setDuration(200).start());
-                recyclerView.post(() -> recyclerView.animate().alpha(1f).setDuration(200).start());
+                try {
+                    adapter.setList(list);
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
 
-                LOADING_APPS = false;
+                if (progressBar != null) {
+                    progressBar.post(() -> progressBar.animate().alpha(0f).setDuration(200).start());
+                } if (recyclerView != null) {
+                    recyclerView.post(() -> recyclerView.animate().alpha(1f).setDuration(200).start());
+                } if (tabLayout != null) {
+                    tabLayout.setClickable(true);
+                    tabLayout.setEnabled(true);
+                }
             });
         });
-
-        return null;
     }
 }

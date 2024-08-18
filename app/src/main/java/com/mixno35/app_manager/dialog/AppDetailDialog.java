@@ -19,9 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textview.MaterialTextView;
+import com.mixno35.app_manager.BuildConfig;
 import com.mixno35.app_manager.DetailsActivity;
 import com.mixno35.app_manager.R;
-import com.mixno35.app_manager.adapter.MenuHorizontalAdapter;
+import com.mixno35.app_manager.adapter.MenuVerticalAdapter;
 import com.mixno35.app_manager.data.ApkExtractor;
 import com.mixno35.app_manager.data.AppData;
 import com.mixno35.app_manager.data.Data;
@@ -50,8 +51,9 @@ public class AppDetailDialog {
         this.context = context;
         this.packageName = packageName;
 
-        if (isOpened) return;
-        else isOpened = true;
+        if (isOpened) {
+            return;
+        } else isOpened = true;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View view = inflater.inflate(R.layout.dialog_app_detail, null);
@@ -79,7 +81,11 @@ public class AppDetailDialog {
                 }));
             }
             list.add(new MenuModel(context.getString(R.string.action_share_app), R.drawable.baseline_share_24, v -> new ApkExtractor(context).shareApkFile(packageManager, packageName)));
-            list.add(new MenuModel(context.getString(R.string.action_find_in_gp_app), R.drawable.baseline_shop_24, v -> Data.openInGooglePlay(context, packageName)));
+            if (BuildConfig.IS_RUSTORE) {
+                list.add(new MenuModel(context.getString(R.string.action_find_in_rustore_app), R.drawable.baseline_shop_24, v -> Data.openInRuStore(context, packageName)));
+            } else {
+                list.add(new MenuModel(context.getString(R.string.action_find_in_gp_app), R.drawable.baseline_shop_24, v -> Data.openInGooglePlay(context, packageName)));
+            }
             list.add(new MenuModel(context.getString(R.string.action_details_app), R.drawable.outline_info_24, v -> {
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(((Activity) context), iconImageView, "sharedImage");
                 context.startActivity(new Intent(context, DetailsActivity.class).putExtra("packageName", packageName), options.toBundle());
@@ -87,7 +93,7 @@ public class AppDetailDialog {
 
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            MenuHorizontalAdapter adapter = new MenuHorizontalAdapter(list, context);
+            MenuVerticalAdapter adapter = new MenuVerticalAdapter(list, context);
             recyclerView.setAdapter(adapter);
 
             try {
@@ -106,7 +112,10 @@ public class AppDetailDialog {
         dialog = new BottomSheetDialog(context);
         dialog.setContentView(view);
         dialog.setCancelable(true);
-        dialog.setOnDismissListener((dialog1) -> isOpened = false);
+        dialog.setOnDismissListener((dialog1) -> {
+            dialog = null;
+            isOpened = false;
+        });
         dialog.show();
     }
 }
