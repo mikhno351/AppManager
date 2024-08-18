@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
 import com.mixno35.app_manager.R;
+import com.mixno35.app_manager.data.ShuffleBgAdapter;
 import com.mixno35.app_manager.model.ActivityModel;
 
 import java.util.ArrayList;
@@ -72,6 +73,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Adapte
 
         holder.valueTextView.post(() -> holder.valueTextView.setText(finalValue));
         holder.detailTextView.post(() -> holder.detailTextView.setText(finalDetail));
+
+        new ShuffleBgAdapter(context, holder.itemView, position);
     }
 
     @Override
@@ -85,7 +88,6 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Adapte
 
         public AdapterHolder(View item) {
             super(item);
-            titleTextView = item.findViewById(R.id.titleTextView);
             valueTextView = item.findViewById(R.id.valueTextView);
             detailTextView = item.findViewById(R.id.detailTextView);
         }

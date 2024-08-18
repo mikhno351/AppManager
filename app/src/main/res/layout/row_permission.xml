@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="?selectableItemBackground"
+    android:foreground="?selectableItemBackground"
     android:paddingVertical="8dp"
     android:paddingHorizontal="22dp">
 
@@ -32,6 +32,7 @@
         android:id="@+id/detailTextView"
         android:singleLine="true"
         android:ellipsize="end"
+        android:layout_marginTop="2dp"
         tools:ignore="HardcodedText" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -2,15 +2,19 @@ package com.mixno35.app_manager.data;
 
 import android.app.usage.StorageStats;
 import android.app.usage.StorageStatsManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 
+import com.mixno35.app_manager.BuildConfig;
 import com.mixno35.app_manager.MainActivity;
 import com.mixno35.app_manager.R;
 import com.mixno35.app_manager.model.AppModel;
@@ -18,6 +22,7 @@ import com.mixno35.app_manager.utils.TextUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +52,30 @@ public class AppData {
         return intent.resolveActivity(packageManager) != null;
     }
 
+    public static boolean isAppInstalled(@NonNull Context context, @NonNull String packageName) {
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    public void installApk(Context context, File apkFile) {
+        if(apkFile.exists()) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uriFromFile(context, apkFile), "application/vnd.android.package-archive");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            try {
+                context.startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     public boolean isAppInstalledFromPlayStore(@NonNull Context context, @NonNull String packageName) {
         List<String> valid = new ArrayList<>(Arrays.asList("com.android.vending", "com.google.android.feedback"));
         final String installer = context.getPackageManager().getInstallerPackageName(packageName);
@@ -74,7 +103,9 @@ public class AppData {
     public void launchApp(@NonNull Context context, @NonNull PackageManager packageManager, @NonNull String packageName) {
         Intent launchIntent = packageManager.getLaunchIntentForPackage(packageName);
 
-        if (launchIntent != null) context.startActivity(launchIntent);
+        if (launchIntent != null) {
+            context.startActivity(launchIntent);
+        }
     }
 
     public int removeAppByPackage(List<AppModel> appList, String packageToRemove) {
@@ -199,22 +230,28 @@ public class AppData {
             result = TextUtils.capitalizeFirstLetter(arr[1]);
         }
 
-        if (packageName.startsWith("com.mixno35.")) {
+        if (packageName.equalsIgnoreCase("com.mixno35.app_manager")) {
             result = context.getString(R.string.developer_alexander_mikhno);
-        } if (packageName.startsWith("com.code_element.vipapp.")) {
+        } if (packageName.equalsIgnoreCase("com.code_element.vipapp.mixno35")) {
             result = TextUtils.multipartDeveloper(context.getString(R.string.developer_vipapp), context.getString(R.string.developer_alexander_mikhno));
         } if (packageName.equalsIgnoreCase("com.code_element.vipapp")) {
             result = context.getString(R.string.developer_vipapp);
-        } if (packageName.startsWith("com.facebook.") || packageName.startsWith("com.whatsapp.") || packageName.equalsIgnoreCase("com.instagram.android")) {
+        } if (packageName.equalsIgnoreCase("com.instagram.android")) {
             result = context.getString(R.string.developer_meta);
         } if (packageName.startsWith("com.twitter.")) {
             result = context.getString(R.string.developer_x);
         } if (packageName.startsWith("com.google.")) {
             result = context.getString(R.string.developer_google);
-        } if (packageName.startsWith("ru.vk.") || packageName.startsWith("com.vkontakte.")) {
+        } if (packageName.startsWith("ru.vk.") || packageName.equalsIgnoreCase("com.vkontakte.android")) {
             result = context.getString(R.string.developer_vk);
+        } if (packageName.startsWith("com.alseda.")) {
+            result = context.getString(R.string.developer_1m_solutions);
         }
 
         return result;
+    }
+
+    Uri uriFromFile(Context context, File file) {
+        return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", file);
     }
 }

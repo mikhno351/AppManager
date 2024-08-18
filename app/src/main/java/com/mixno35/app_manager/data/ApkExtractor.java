@@ -149,7 +149,7 @@ public class ApkExtractor {
                 .setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .addAction(R.drawable.baseline_share_24, context.getString(R.string.action_share_app), pendingIntent);
+                .addAction(R.drawable.baseline_share_24, context.getString(R.string.action_share), pendingIntent);
 
         notificationManager.notify(1, builder.build());
     }

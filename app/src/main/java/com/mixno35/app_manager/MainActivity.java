@@ -278,6 +278,9 @@ public class MainActivity extends AppCompatActivity {
                     if (id == R.id.menuActionSettings) {
                         startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                         return true;
+                    } if (id == R.id.menuActionExtractedApps) {
+                        startActivity(new Intent(getApplicationContext(), ExtractedAppsActivity.class));
+                        return true;
                     }
 
                     return false;
@@ -285,12 +288,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ViewCompat.setOnApplyWindowInsetsListener(recyclerView, (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(insets.left, 0, insets.right, insets.bottom);
+        if (recyclerView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(recyclerView, (v, windowInsets) -> {
+                Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(insets.left, 0, insets.right, insets.bottom);
 
-            return WindowInsetsCompat.CONSUMED;
-        });
+                return WindowInsetsCompat.CONSUMED;
+            });
+        }
 
         uninstallAppLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {

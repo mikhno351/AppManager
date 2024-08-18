@@ -49,7 +49,7 @@
     <string name="text_activity_exported">Exported: %1s</string>
     <string name="text_permission_granded">Granded: %1s</string>
     <string name="text_apk_extracted_hidden">APK file was successfully extracted</string>
-    <string name="text_app_developer">Developer (the information may be incorrect)</string>
+    <string name="text_app_developer">Developer (information may be unreliable)</string>
     <string name="text_unknown">Unknown</string>
     <string name="text_nothing_not_found">Nothing was found</string>
 
@@ -69,7 +69,7 @@
     <string name="message_app_no_require_perms">The application does not require special permissions</string>
     <string name="message_app_no_require_activities">The application does not contain any available activities</string>
     <string name="message_no_detail_info_permission">There is no detailed information about the \"%s\" permission</string>
-    <string name="message_package_usage_stats_size">Permission is required to see the size of the applications</string>
+    <string name="message_package_usage_stats_size">Permission is required to see the size of the applications.</string>
     <string name="message_prefs_changed">You have changed an important setting, in order for it to be applied, you need to restart the application. Are you ready to do it now?</string>
     <string name="message_apk_extracted_hidden">The file \"%1s\" has been successfully extracted, now you can share it</string>
 
@@ -78,6 +78,8 @@
     <string name="toast_app_deleted">Application "%s" has been successfully deleted.</string>
     <string name="toast_package_usage_stats">Allow the application to use statistics from other applications. By allowing statistics to be used, the App Manager will track activity in other applications.</string>
     <string name="toast_extracting_apk_background">The extraction of the APK file will continue in the background…</string>
+    <string name="toast_allow_unknown_sources">Allow the application to install from unknown sources</string>
+
     <string name="text_copied_to_clipboard">Saved to the clipboard</string>
     <string name="text_bytes">B KB MB GB TB</string>
 
@@ -93,7 +95,7 @@
     <string name="action_delete_app">Delete</string>
     <string name="action_settings_app">Manage</string>
     <string name="action_stop_app">Stop</string>
-    <string name="action_share_app">Share</string>
+    <string name="action_share_app">Extract APK</string>
     <string name="action_find_in_gp_app">Find in Google Play</string>
     <string name="action_find_in_rustore_app">Find in RuStore</string>
     <string name="action_details_app">Details</string>
@@ -102,6 +104,9 @@
     <string name="action_activities_app" translatable="false">Activities</string>
     <string name="action_resources_app">Resources</string>
     <string name="action_restart">Restart</string>
+    <string name="action_extracted_apps">Extracted APK</string>
+    <string name="action_share">Share</string>
+    <string name="action_install_app">Install</string>
 
     <string name="prefs_category_other">Other</string>
     <string name="prefs_category_base">Base</string>
@@ -125,4 +130,5 @@
     <string name="developer_meta" translatable="false">Meta Platforms, Inc.</string>
     <string name="developer_x" translatable="false">X.com</string>
     <string name="developer_vk">VKontakte</string>
+    <string name="developer_1m_solutions" translatable="false">1M Solutions</string>
 </resources>

@@ -27,7 +27,6 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,8 +37,6 @@ public class Data {
     public static String PREFS_NAME(Context context) {
             return context.getPackageName() + "_preferences";
     }
-    public static String PREFS_KEY_LIST_FILTER = "list_filter";
-    public static String PREFS_KEY_LIST_RECENT = "list_recent";
 
     static String GOOGLE_PLAY_APP_LINK = "https://play.google.com/store/apps/details?id=%20";
     static String RUSTORE_APP_LINK = "https://apps.rustore.ru/app/%20";
@@ -88,16 +85,6 @@ public class Data {
     public static void requestUsageStatsPermission(@NonNull ActivityResultLauncher<Intent> usageStatsLauncher) {
         Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
         usageStatsLauncher.launch(intent);
-    }
-
-    @SuppressLint("DefaultLocale")
-    public static String convertBytes(@NonNull Context context, long bytes) {
-        final String[] units = context.getString(R.string.text_bytes).split("\\s+");
-        if (bytes <= 0) {
-            return "0 " + units[0];
-        }
-        int digitGroups = (int) (Math.log10(bytes) / Math.log10(1024));
-        return new DecimalFormat("#,##0.#").format(bytes / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 
     public static void copyToClipboard(@NonNull Context context, @NonNull String text) {

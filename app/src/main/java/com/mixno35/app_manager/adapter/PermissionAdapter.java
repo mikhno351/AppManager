@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
 import com.mixno35.app_manager.R;
+import com.mixno35.app_manager.data.ShuffleBgAdapter;
 import com.mixno35.app_manager.dialog.PermissionDetailDialog;
 import com.mixno35.app_manager.model.PermissionModel;
 
@@ -76,6 +77,8 @@ public class PermissionAdapter extends RecyclerView.Adapter<PermissionAdapter.Ad
         if (!finalValue.equals("-")) {
             holder.itemView.setOnClickListener(v -> new PermissionDetailDialog(context, packageManager, finalValue));
         }
+
+        new ShuffleBgAdapter(context, holder.itemView, position);
     }
 
     @Override

@@ -8,8 +8,8 @@
     <string name="text_user_apps">Карыстальніцкія</string>
     <string name="text_system_apps">Сістэмныя</string>
     <string name="text_all_apps">Усе</string>
-    <string name="text_extracting_apk">Выдзеленне APK…</string>
-    <string name="text_extracting_apk_v2">Выдзеленне APK \"%s\"…</string>
+    <string name="text_extracting_apk">Выцягванне APK…</string>
+    <string name="text_extracting_apk_v2">Выцягванне APK \"%s\"…</string>
     <string name="text_share_apk">Падзяліцца APK</string>
     <string name="message_unknown_app">Магчыма, вы спрабуеце адкрыць неіснуючую праграму.</string>
     <string name="message_aus">Маніторынг выкарыстання праграм…</string>
@@ -18,7 +18,7 @@
     <string name="message_used_app">Час працы: %s</string>
     <string name="message_app_no_require_perms">Гэта праграма не патрабуе асабістых дазволаў</string>
     <string name="message_no_detail_info_permission">Няма падрабязнай інфармацыі аб дазволе \"%s\"</string>
-    <string name="message_package_usage_stats_size">Для прагляду памеру праграм неабходны дазвол</string>
+    <string name="message_package_usage_stats_size">Для прагляду памеру праграм неабходны дазвол.</string>
     <string name="toast_app_not_deleted">Праграма не была выдаленая.</string>
     <string name="toast_unknown_data_deleted">Нам не ўдалося апрацаваць запыт на выдаленне ўнутры праграмы.</string>
     <string name="toast_app_deleted">Праграма \"%s\" была паспяхова выдаленая.</string>
@@ -26,7 +26,7 @@
     <string name="toast_extracting_apk_background">Выдзеленне APK-файла будзе працягнута ў фонавым рэжыме…</string>
     <string name="action_more">Больш</string>
     <string name="action_filter">Фільтры</string>
-    <string name="action_provide">Прадастаўце</string>
+    <string name="action_provide">Дазволіць</string>
     <string name="action_stop">Спыніць</string>
     <string name="action_close">Закрыць</string>
     <string name="action_hide">Схаваць</string>
@@ -34,7 +34,7 @@
     <string name="action_delete_app">Выдаліць</string>
     <string name="action_settings_app">Налады</string>
     <string name="action_stop_app">Спыніць</string>
-    <string name="action_share_app">Падзяліцца</string>
+    <string name="action_share_app">Выцягнуць APK</string>
     <string name="hint_search">Пошук праграм</string>
     <string name="contentDescription_app_icon">Іконка праграмы</string>
     <string name="action_find_in_rustore_app">Шукаць у RuStore</string>
@@ -47,6 +47,8 @@
     <string name="action_cancel">Скасаваць</string>
     <string name="action_manifest_app">Маніфест</string>
     <string name="action_restart">Перазапусціць</string>
+    <string name="action_share">Падзяліцца</string>
+    <string name="action_install_app">Усталяваць</string>
     <string name="prefs_category_other">Іншае</string>
     <string name="tab_details">Падрабязна</string>
     <string name="tab_basic">Асноўнае</string>
@@ -61,7 +63,7 @@
     <string name="text_source_dir">Выхадны каталог</string>
     <string name="text_default">Па змаўчанні</string>
     <string name="text_time_minute">х</string>
-    <string name="text_app_developer">Распрацоўшчык (інфармацыя можа быць няправільнай)</string>
+    <string name="text_app_developer">Распрацоўшчык (інфармацыя можа быць недакладнай)</string>
     <string name="text_unknown">Невядома</string>
     <string name="provenance_user">Усталёўшчык</string>
     <string name="provenance_system">Сістэма</string>
@@ -91,11 +93,11 @@
     <string name="text_time_hour">г</string>
     <string name="text_time_day">д</string>
     <string name="text_bytes">Б КБ МБ ГБ ТБ</string>
-    <string name="message_app_no_require_activities">Гэта прыкладанне не ўтрымлівае ніякіх даступных актыўнасцей</string>
+    <string name="message_app_no_require_activities">Гэта праграма не ўтрымлівае ніякіх даступных актыўнасцей</string>
     <string name="text_apk_extracted_hidden">APK файл паспяхова выдзелены</string>
-    <string name="message_apk_extracted_hidden">Файл \"%1s\" паспяхова выдзелены, цяпер вы можаце ім падзяліцца</string>
-    <string name="text_user_applications_that_can_run">Карыстальніцкія прыкладання, якія могуць быць запушчаны</string>
-    <string name="text_user_system_applications_that_can_run">Карыстальніцкія і сістэмныя прыкладання, якія могуць быць запушчаныя</string>
+    <string name="message_apk_extracted_hidden">Файл \"%1s\" паспяхова выцягнуты, цяпер вы можаце ім падзяліцца</string>
+    <string name="text_user_applications_that_can_run">Карыстальніцкія праграмы, якія могуць быць запушчаны</string>
+    <string name="text_user_system_applications_that_can_run">Карыстальніцкія і сістэмныя праграмы, якія могуць быць запушчаныя</string>
     <string name="text_yes">Так</string>
     <string name="text_no">Не</string>
     <string name="text_activity_enabled">Уключаны: %1s</string>
@@ -104,4 +106,6 @@
     <string name="text_nothing_not_found">Нічога не знойдзена</string>
     <string name="developer_alexander_mikhno">Аляксандр Міхно</string>
     <string name="developer_vk">ВКонтакте</string>
+    <string name="action_extracted_apps">Выцягнутыя APK</string>
+    <string name="toast_allow_unknown_sources">Дазволіце ўстаноўку з невядомых крыніц</string>
 </resources>

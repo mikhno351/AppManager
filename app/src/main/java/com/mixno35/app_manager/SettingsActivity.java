@@ -24,7 +24,9 @@ public class SettingsActivity extends AppCompatActivity {
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) EdgeToEdge.enable(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            EdgeToEdge.enable(this);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
@@ -35,7 +37,6 @@ public class SettingsActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            setTitle(getString(R.string.action_settings));
         }
 
         if (savedInstanceState == null) {

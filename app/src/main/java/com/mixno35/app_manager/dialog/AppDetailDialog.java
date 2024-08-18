@@ -80,7 +80,7 @@ public class AppDetailDialog {
                     dialog.dismiss();
                 }));
             }
-            list.add(new MenuModel(context.getString(R.string.action_share_app), R.drawable.baseline_share_24, v -> new ApkExtractor(context).shareApkFile(packageManager, packageName)));
+            list.add(new MenuModel(context.getString(R.string.action_share_app), R.drawable.baseline_upload_24, v -> new ApkExtractor(context).shareApkFile(packageManager, packageName)));
             if (BuildConfig.IS_RUSTORE) {
                 list.add(new MenuModel(context.getString(R.string.action_find_in_rustore_app), R.drawable.baseline_shop_24, v -> Data.openInRuStore(context, packageName)));
             } else {

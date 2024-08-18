@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -204,11 +205,11 @@ public class BaseFragment extends Fragment {
 
             requireActivity().runOnUiThread(() -> {
                 if (textSizeApp != null) {
-                    textSizeApp.post(() -> textSizeApp.setText(Data.convertBytes(requireContext(), appSize.get(2))));
+                    textSizeApp.post(() -> textSizeApp.setText(Formatter.formatFileSize(requireContext(), appSize.get(2))));
                 } if (textSizeData != null) {
-                    textSizeData.post(() -> textSizeData.setText(Data.convertBytes(requireContext(), appSize.get(1))));
+                    textSizeData.post(() -> textSizeData.setText(Formatter.formatFileSize(requireContext(), appSize.get(1))));
                 } if (textSizeCache != null) {
-                    textSizeCache.post(() -> textSizeCache.setText(Data.convertBytes(requireContext(), appSize.get(0))));
+                    textSizeCache.post(() -> textSizeCache.setText(Formatter.formatFileSize(requireContext(), appSize.get(0))));
                 }
             });
         });
