@@ -76,6 +76,7 @@
                         android:background="@android:color/transparent"
                         app:cornerRadius="8dp"
                         android:contentDescription="@string/contentDescription_app_icon"
+                        android:transitionName="appTransitionSharedImage"
                         tools:ignore="HardcodedText" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat

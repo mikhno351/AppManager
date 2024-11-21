@@ -73,7 +73,8 @@ public class AppExtractMenuDialog {
         }));
         if (BuildConfig.IS_RUSTORE) {
             list.add(new MenuModel(context.getString(R.string.action_find_in_rustore_app), R.drawable.baseline_shop_24, v -> Data.openInRuStore(context, appPackage)));
-        } else {
+        }
+        if (Data.isGooglePlayServicesAvailable(context)) {
             list.add(new MenuModel(context.getString(R.string.action_find_in_gp_app), R.drawable.baseline_shop_24, v -> Data.openInGooglePlay(context, appPackage)));
         }
         list.add(new MenuModel(context.getString(R.string.action_delete_extracted_apk), R.drawable.baseline_delete_outline_24, v -> {
@@ -86,7 +87,7 @@ public class AppExtractMenuDialog {
             }
         }));
         list.add(new MenuModel(context.getString(R.string.action_details_app), R.drawable.outline_info_24, v -> {
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(((Activity) context), iconImageView, "sharedImage");
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(((Activity) context), iconImageView, "appTransitionSharedImage");
             context.startActivity(new Intent(context, DetailsActivity.class).putExtra("packageName", appFile.getAbsolutePath()), options.toBundle());
         }));
 

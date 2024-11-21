@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat
 plugins {
     id("com.android.application")
     id("com.google.android.gms.oss-licenses-plugin")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 val versionNameDate = SimpleDateFormat("dd-MM-yy").format(Date()).toString()
@@ -49,6 +51,10 @@ android {
 }
 
 dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.android.gms:play-services-base:18.5.0")
     implementation("com.google.android.gms:play-services-oss-licenses:17.1.0")
     implementation("androidx.preference:preference:1.2.1")
     implementation("androidx.fragment:fragment:1.8.5")

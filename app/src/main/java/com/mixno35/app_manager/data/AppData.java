@@ -139,7 +139,7 @@ public class AppData {
         for (PackageInfo info : packages) {
             if (!isSystem(packageManager, info.packageName)) list.add(new AppModel(
                     info.packageName,
-                    info.applicationInfo.loadLabel(packageManager).toString(),
+                    Objects.requireNonNull(info.applicationInfo).loadLabel(packageManager).toString(),
                     info.applicationInfo.loadIcon(packageManager)
             ));
         }
@@ -154,7 +154,7 @@ public class AppData {
         for (PackageInfo info : packages) {
             if (isSystem(packageManager, info.packageName)) list.add(new AppModel(
                     info.packageName,
-                    info.applicationInfo.loadLabel(packageManager).toString(),
+                    Objects.requireNonNull(info.applicationInfo).loadLabel(packageManager).toString(),
                     info.applicationInfo.loadIcon(packageManager)
             ));
         }
@@ -169,7 +169,7 @@ public class AppData {
         for (PackageInfo info : packages) {
             if (isAppInstalledFromPlayStore(context, info.packageName)) list.add(new AppModel(
                     info.packageName,
-                    info.applicationInfo.loadLabel(packageManager).toString(),
+                    Objects.requireNonNull(info.applicationInfo).loadLabel(packageManager).toString(),
                     info.applicationInfo.loadIcon(packageManager)
             ));
         }
@@ -201,7 +201,7 @@ public class AppData {
         List<PackageInfo> packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA);
 
         for (PackageInfo info : packages) {
-            list.add(new AppModel(info.packageName, info.applicationInfo.loadLabel(packageManager).toString(), info.applicationInfo.loadIcon(packageManager)));
+            list.add(new AppModel(info.packageName, Objects.requireNonNull(info.applicationInfo).loadLabel(packageManager).toString(), info.applicationInfo.loadIcon(packageManager)));
         }
 
         return list;
@@ -213,7 +213,7 @@ public class AppData {
 
         for (PackageInfo info : packages) {
             String packageName = info.packageName.toLowerCase();
-            String appName = info.applicationInfo.loadLabel(packageManager).toString().toLowerCase();
+            String appName = Objects.requireNonNull(info.applicationInfo).loadLabel(packageManager).toString().toLowerCase();
             String searchText = text.toLowerCase();
 
             if (packageName.contains(searchText) || appName.contains(searchText)) {

@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
             arrayTabs.add(new Tab(tabLayout, getString(R.string.text_user_apps), "default"));
             arrayTabs.add(new Tab(tabLayout, getString(R.string.text_system_apps), "system"));
-            if (!BuildConfig.IS_RUSTORE) {
+            if (Data.isGooglePlayServicesAvailable(this)) {
                 arrayTabs.add(new Tab(tabLayout, getString(R.string.text_google_play), "google_play"));
             }
             arrayTabs.add(new Tab(tabLayout, getString(R.string.text_all_apps), "all"));

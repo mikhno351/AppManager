@@ -102,7 +102,7 @@
     <string name="text_no">Нет</string>
     <string name="text_activity_enabled">Включен: %1s</string>
     <string name="text_activity_exported">Доступен из вне: %1s</string>
-    <string name="text_permission_granded">Выдано: %1s</string>
+    <string name="text_permission_granded">Разрешено: %1s</string>
     <string name="text_nothing_not_found">Ничего не найдено</string>
     <string name="developer_alexander_mikhno">Александр Михно</string>
     <string name="developer_vk">ВКонтакте</string>

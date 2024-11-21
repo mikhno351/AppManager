@@ -91,11 +91,9 @@ public class DetailsActivity extends AppCompatActivity {
         try {
             PackageInfo packageInfo = AppData.getPackageInfo(packageManager, packageName, 0);
 
-            ViewCompat.setTransitionName(appIcon, "sharedImage");
+            appIcon.post(() -> appIcon.setImageDrawable(Objects.requireNonNull(packageInfo.applicationInfo).loadIcon(packageManager)));
 
-            appIcon.post(() -> appIcon.setImageDrawable(packageInfo.applicationInfo.loadIcon(packageManager)));
-
-            setTitle(packageInfo.applicationInfo.loadLabel(packageManager));
+            setTitle(Objects.requireNonNull(packageInfo.applicationInfo).loadLabel(packageManager));
         } catch (Exception ignore) {}
 
         if (toolbar != null) {

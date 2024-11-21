@@ -23,7 +23,7 @@
         tools:targetApi="31"
         android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true"
-        android:name=".data.MyApplication">
+        android:name=".app.BaseApplication">
         <activity
             android:name=".MainActivity"
             android:exported="true">

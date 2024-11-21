@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -83,11 +84,12 @@ public class AppDetailDialog {
             list.add(new MenuModel(context.getString(R.string.action_share_app), R.drawable.baseline_upload_24, v -> new ApkExtractor(context).shareApkFile(packageManager, packageName)));
             if (BuildConfig.IS_RUSTORE) {
                 list.add(new MenuModel(context.getString(R.string.action_find_in_rustore_app), R.drawable.baseline_shop_24, v -> Data.openInRuStore(context, packageName)));
-            } else {
+            }
+            if (Data.isGooglePlayServicesAvailable(context)) {
                 list.add(new MenuModel(context.getString(R.string.action_find_in_gp_app), R.drawable.baseline_shop_24, v -> Data.openInGooglePlay(context, packageName)));
             }
             list.add(new MenuModel(context.getString(R.string.action_details_app), R.drawable.outline_info_24, v -> {
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(((Activity) context), iconImageView, "sharedImage");
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(((Activity) context), iconImageView, "appTransitionSharedImage");
                 context.startActivity(new Intent(context, DetailsActivity.class).putExtra("packageName", packageName), options.toBundle());
             }));
 

@@ -8,22 +8,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.Settings;
-import android.text.format.DateFormat;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
-import com.mixno35.app_manager.BuildConfig;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.mixno35.app_manager.R;
 import com.mixno35.app_manager.model.AndroidModel;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -142,42 +140,15 @@ public class Data {
         }
     }
 
-    public static void writeToLog(@NonNull Context context, @NonNull String message) {
-        String message_result = "\n";
-        message_result += DateFormat.format("yyyy-MM-dd HH:mm:ss", new Date());
-        message_result += "\nAndroid: " + Build.VERSION.RELEASE;
-        message_result += "\nSDK: " + Build.VERSION.SDK_INT;
-        message_result += "\nBASE-OS: " + Build.VERSION.BASE_OS;
-        message_result += "\nCODENAME: " + Build.VERSION.CODENAME;
-        message_result += "\nAPP-VERSION: " + BuildConfig.VERSION_NAME;
-        message_result += "\nAPP-VERSION-CODE: " + BuildConfig.VERSION_CODE;
-        message_result += "\nAPP-PACKAGE: " + BuildConfig.APPLICATION_ID;
-        message_result += "\nAPP-BUILD: " + BuildConfig.BUILD_TYPE;
-        message_result += "\n> ";
-        message_result += message;
-        message_result += "\n\n";
-
-        File logFile = new File(context.getExternalFilesDir(null), "log.txt");
-        FileWriter writer;
-        try {
-            if (!logFile.exists()) {
-                if (logFile.createNewFile()) {
-                    writer = new FileWriter(logFile, true);
-                    writer.append(message_result);
-                    writer.close();
-                }
-            } if (logFile.exists()) {
-                writer = new FileWriter(logFile, true);
-                writer.append(message_result);
-                writer.close();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static boolean isDarkThemeEnabled(@NonNull Context context) {
         int nightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         return nightMode == Configuration.UI_MODE_NIGHT_YES;
+    }
+
+    public static boolean isGooglePlayServicesAvailable(Context context) {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
+
+        return resultCode == ConnectionResult.SUCCESS;
     }
 }
