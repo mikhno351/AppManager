@@ -16,12 +16,12 @@ buildNumberFile.writeText((buildNumber + 1).toString())
 
 android {
     namespace = "com.mixno35.app_manager"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.mixno35.app_manager"
         minSdk = 27
-        targetSdk = 34
+        targetSdk = 35
         versionCode = buildNumber
         versionName = "1.0.${buildNumber}.${versionNameDate}"
 
@@ -51,12 +51,12 @@ android {
 dependencies {
     implementation("com.google.android.gms:play-services-oss-licenses:17.1.0")
     implementation("androidx.preference:preference:1.2.1")
-    implementation("androidx.fragment:fragment:1.8.2")
+    implementation("androidx.fragment:fragment:1.8.5")
     implementation("com.jaredrummler:apk-parser:1.0.2")
-    implementation("androidx.core:core:1.13.1")
+    implementation("androidx.core:core:1.15.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")

@@ -23,7 +23,7 @@
     <string name="toast_unknown_data_deleted">Нам не ўдалося апрацаваць запыт на выдаленне ўнутры праграмы.</string>
     <string name="toast_app_deleted">Праграма \"%s\" была паспяхова выдаленая.</string>
     <string name="toast_package_usage_stats">Дазвольце праграме выкарыстоўваць статыстыку іншых праграм. Дазволіўшы выкарыстоўваць статыстыку, App Manager будзе адсочваць актыўнасць у іншых праграмах.</string>
-    <string name="toast_extracting_apk_background">Выдзеленне APK-файла будзе працягнута ў фонавым рэжыме…</string>
+    <string name="toast_extracting_apk_background">Выцягванне APK-файла будзе працягнута ў фонавым рэжыме…</string>
     <string name="action_more">Больш</string>
     <string name="action_filter">Фільтры</string>
     <string name="action_provide">Дазволіць</string>
@@ -69,7 +69,7 @@
     <string name="provenance_system">Сістэма</string>
     <string name="text_min_sdk">Мінімальная версія SDK (API)</string>
     <string name="text_target_sdk">Мэтавая версія SDK (API)</string>
-    <string name="text_executed_apk">Выдзелены APK</string>
+    <string name="text_executed_apk">Выцягнуты APK</string>
     <string name="text_copied_to_clipboard">Захавана ў буфер абмену</string>
     <string name="text_pub_source_dir">Грамадскі выхадны каталог</string>
     <string name="text_native_library_dir">Каталог бібліятэк</string>
@@ -94,7 +94,7 @@
     <string name="text_time_day">д</string>
     <string name="text_bytes">Б КБ МБ ГБ ТБ</string>
     <string name="message_app_no_require_activities">Гэта праграма не ўтрымлівае ніякіх даступных актыўнасцей</string>
-    <string name="text_apk_extracted_hidden">APK файл паспяхова выдзелены</string>
+    <string name="text_apk_extracted_hidden">APK файл паспяхова выцягнуты</string>
     <string name="message_apk_extracted_hidden">Файл \"%1s\" паспяхова выцягнуты, цяпер вы можаце ім падзяліцца</string>
     <string name="text_user_applications_that_can_run">Карыстальніцкія праграмы, якія могуць быць запушчаны</string>
     <string name="text_user_system_applications_that_can_run">Карыстальніцкія і сістэмныя праграмы, якія могуць быць запушчаныя</string>

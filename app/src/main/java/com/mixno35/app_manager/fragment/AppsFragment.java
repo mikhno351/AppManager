@@ -29,6 +29,7 @@ import com.mixno35.app_manager.data.AppData;
 import com.mixno35.app_manager.model.AppModel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -43,88 +44,98 @@ public class AppsFragment extends Fragment {
 
     ExecutorService executorSingle;
 
-    String rn;
+    public AppsFragment newInstance(String tabName) {
+        AppsFragment fragment = new AppsFragment();
 
-    public AppsFragment(String rn) {
-        this.rn = rn;
+        Bundle args = new Bundle();
+        args.putString("TAB_NAME", tabName);
+
+        fragment.setArguments(args);
+
+        return fragment;
     }
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "UseRequireInsteadOfGet"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_apps, container, false);
 
-        progressBar = view.findViewById(R.id.progressBar);
-        recyclerView = view.findViewById(R.id.recyclerView);
+        try {
+            progressBar = view.findViewById(R.id.progressBar);
+            recyclerView = view.findViewById(R.id.recyclerView);
 
-        adapter = new AppAdapter(list, requireContext());
+            adapter = new AppAdapter(list, requireContext());
 
-        if (recyclerView != null) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-            recyclerView.setAdapter(adapter);
+            if (recyclerView != null) {
+                recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                recyclerView.setAdapter(adapter);
 
-            ViewCompat.setOnApplyWindowInsetsListener(recyclerView, (v, windowInsets) -> {
-                Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-                v.setPadding(insets.left, 0, insets.right, insets.bottom);
+                ViewCompat.setOnApplyWindowInsetsListener(recyclerView, (v, windowInsets) -> {
+                    Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+                    v.setPadding(insets.left, 0, insets.right, insets.bottom);
 
-                return WindowInsetsCompat.CONSUMED;
-            });
-        }
+                    return WindowInsetsCompat.CONSUMED;
+                });
+            }
 
-        MainActivity.uninstallAppLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == RESULT_OK) {
-                if (!APP_PACKAGE_REMOVE.trim().isEmpty()) {
-                    Snackbar.make(recyclerView, String.format(getString(R.string.toast_app_deleted), APP_PACKAGE_REMOVE), Snackbar.LENGTH_LONG).show();
-                    requireActivity().runOnUiThread(() -> adapter.notifyItemRemoved(new AppData().removeAppByPackage(list, APP_PACKAGE_REMOVE)));
-                }
-            } else Snackbar.make(recyclerView, getString(R.string.toast_app_not_deleted), Snackbar.LENGTH_LONG).show();
+            MainActivity.uninstallAppLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    if (!APP_PACKAGE_REMOVE.trim().isEmpty()) {
+                        Snackbar.make(recyclerView, String.format(getString(R.string.toast_app_deleted), APP_PACKAGE_REMOVE), Snackbar.LENGTH_LONG).show();
+                        requireActivity().runOnUiThread(() -> adapter.notifyItemRemoved(new AppData().removeAppByPackage(list, APP_PACKAGE_REMOVE)));
+                    }
+                } else Snackbar.make(recyclerView, getString(R.string.toast_app_not_deleted), Snackbar.LENGTH_LONG).show();
 
-            APP_PACKAGE_REMOVE = "";
-        });
-
-        executorSingle = Executors.newSingleThreadExecutor();
-        executorSingle.submit(() -> {
-            requireActivity().runOnUiThread(() -> {
-                if (progressBar != null) {
-                    progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
-                } if (recyclerView != null) {
-                    recyclerView.post(() -> {
-                        recyclerView.animate().alpha(0f).setDuration(0).start();
-                        recyclerView.scrollToPosition(0);
-                    });
-                }
+                APP_PACKAGE_REMOVE = "";
             });
 
-            list.clear();
+            executorSingle = Executors.newSingleThreadExecutor();
+            executorSingle.submit(() -> {
+                requireActivity().runOnUiThread(() -> {
+                    if (progressBar != null) {
+                        progressBar.post(() -> progressBar.animate().alpha(1f).setDuration(200).start());
+                    } if (recyclerView != null) {
+                        recyclerView.post(() -> {
+                            recyclerView.animate().alpha(0f).setDuration(0).start();
+                            recyclerView.scrollToPosition(0);
+                        });
+                    }
+                });
 
-            PackageManager packageManager = requireActivity().getPackageManager();
+                list.clear();
 
-            try {
-                if (rn.equalsIgnoreCase("default")) {
-                    list.addAll(new AppData().get_arrayAppsUser(packageManager));
-                } else if (rn.equalsIgnoreCase("system")) {
-                    list.addAll(new AppData().get_arrayAppsSystem(packageManager));
-                } else if (rn.equalsIgnoreCase("google_play")) {
-                    list.addAll(new AppData().get_arrayAppsGooglePlay(requireContext(), packageManager));
-                } else if (rn.equalsIgnoreCase("all")) {
-                    list.addAll(new AppData().get_arrayAppsAll(packageManager));
-                }
-            } catch (Exception ignored) {}
+                PackageManager packageManager = requireActivity().getPackageManager();
 
-            requireActivity().runOnUiThread(() -> {
                 try {
-                    adapter.setList(list);
-                } catch (Exception e) {
-                    Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                    assert getArguments() != null;
+                    if (Objects.requireNonNull(getArguments().getString("TAB_NAME")).equalsIgnoreCase("default")) {
+                        list.addAll(new AppData().get_arrayAppsUser(packageManager));
+                    } else if (Objects.requireNonNull(getArguments().getString("TAB_NAME")).equalsIgnoreCase("system")) {
+                        list.addAll(new AppData().get_arrayAppsSystem(packageManager));
+                    } else if (Objects.requireNonNull(getArguments().getString("TAB_NAME")).equalsIgnoreCase("google_play")) {
+                        list.addAll(new AppData().get_arrayAppsGooglePlay(requireContext(), packageManager));
+                    } else if (Objects.requireNonNull(getArguments().getString("TAB_NAME")).equalsIgnoreCase("all")) {
+                        list.addAll(new AppData().get_arrayAppsAll(packageManager));
+                    }
+                } catch (Exception ignored) {}
 
-                if (progressBar != null) {
-                    progressBar.post(() -> progressBar.animate().alpha(0f).setDuration(200).start());
-                } if (recyclerView != null) {
-                    recyclerView.post(() -> recyclerView.animate().alpha(1f).setDuration(200).start());
-                }
+                requireActivity().runOnUiThread(() -> {
+                    try {
+                        adapter.setList(list);
+                    } catch (Exception e) {
+                        Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (progressBar != null) {
+                        progressBar.post(() -> progressBar.animate().alpha(0f).setDuration(200).start());
+                    } if (recyclerView != null) {
+                        recyclerView.post(() -> recyclerView.animate().alpha(1f).setDuration(200).start());
+                    }
+                });
             });
-        });
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error apps fragment: "  + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
 
         return view;
     }

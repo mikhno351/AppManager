@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static Boolean APK_SHARE_HIDDEN = false;
 
+    boolean IS_SCREEN_STARTED = false;
+
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
             recyclerViewSearch.setAdapter(adapterSearch);
         }
 
-        openFragment(new AppsFragment("default"));
         loadAndroidVersions(Data.readInputStream(getResources().openRawResource(R.raw.android_versions)));
 
         if (toolbar != null) {
@@ -235,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
-                    new Handler().postDelayed(() -> openFragment(new AppsFragment(arrayTabs.get(tab.getPosition()).getRunnable())), 100);
+                    openTab(arrayTabs.get(tab.getPosition()).getRunnable());
                 }
 
                 @Override
@@ -268,6 +269,16 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (!IS_SCREEN_STARTED) {
+            IS_SCREEN_STARTED = true;
+            openTab("default");
+        }
     }
 
     @Override
@@ -309,6 +320,14 @@ public class MainActivity extends AppCompatActivity {
         if (searchView != null && searchView.getCurrentTransitionState() == SearchView.TransitionState.SHOWN) {
             Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_LONG).show();
         } return super.getOnBackInvokedDispatcher();
+    }
+
+    void openTab(String tabName) {
+        new Handler().postDelayed(() -> {
+            try {
+                openFragment(new AppsFragment().newInstance(tabName));
+            } catch (Exception ignored) {}
+        }, 200);
     }
 
     void openFragment(@NotNull Fragment fragment) {
