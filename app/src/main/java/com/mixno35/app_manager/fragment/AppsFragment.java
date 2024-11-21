@@ -45,14 +45,12 @@ public class AppsFragment extends Fragment {
     ExecutorService executorSingle;
 
     public AppsFragment newInstance(String tabName) {
-        AppsFragment fragment = new AppsFragment();
-
         Bundle args = new Bundle();
         args.putString("TAB_NAME", tabName);
 
-        fragment.setArguments(args);
+        setArguments(args);
 
-        return fragment;
+        return this;
     }
 
     @SuppressLint({"MissingInflatedId", "UseRequireInsteadOfGet"})
