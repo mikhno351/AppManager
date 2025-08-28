@@ -1,4 +1,4 @@
-package com.mixno35.app_manager;
+package com.mikhno.appmanager;
 
 import android.content.Context;
 

@@ -11,31 +11,4 @@
             android:entryValues="@array/languages_value" />
     </androidx.preference.PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory android:title="@string/prefs_category_other">
-        <androidx.preference.Preference
-            android:key="keyOssLicenses"
-            android:title="@string/prefs_title_open_license_software">
-
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:targetPackage="com.mixno35.app_manager"
-                android:targetClass="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"/>
-
-        </androidx.preference.Preference>
-
-        <androidx.preference.Preference
-            android:key="keyPrivacy"
-            android:title="@string/prefs_title_privacy"/>
-
-        <androidx.preference.Preference
-            android:key="keyTerms"
-            android:title="@string/prefs_title_terms"/>
-
-        <androidx.preference.Preference
-            android:key="keyAboutApp"
-            android:icon="@drawable/outline_info_24"
-            android:title="@string/prefs_title_about_app"/>
-
-    </androidx.preference.PreferenceCategory>
-
 </androidx.preference.PreferenceScreen>

@@ -16,25 +16,26 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:titleCollapseMode="fade"
+            app:expandedTitleGravity="center|bottom"
             app:layout_collapseMode="pin"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@mipmap/ic_launcher"
+                android:layout_gravity="center|bottom"
+                android:layout_marginTop="52dp"
+                android:layout_marginBottom="52dp"
+                android:transitionName="appTransitionSharedImage"
+                android:id="@+id/appIcon"/>
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"/>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@mipmap/ic_launcher"
-                android:layout_gravity="end|bottom"
-                android:layout_marginTop="64dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="6dp"
-                android:transitionName="appTransitionSharedImage"
-                android:id="@+id/appIcon"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

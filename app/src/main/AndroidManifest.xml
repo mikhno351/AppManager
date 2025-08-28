@@ -46,13 +46,6 @@
             android:label="@string/action_extracted_apps"
             android:exported="false"/>
 
-        <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-            android:theme="@style/Theme.AppCompat.DayNight" />
-        <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
-            android:theme="@style/Theme.AppCompat.DayNight" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

@@ -21,15 +21,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="48dp"
-                android:paddingBottom="12dp">
+                android:paddingBottom="16dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="22dp"
-                    android:paddingBottom="16dp">
+                    android:paddingHorizontal="16dp">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iconImageView"
@@ -81,18 +80,13 @@
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="?dividerVertical"/>
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/recyclerView"
                     android:nestedScrollingEnabled="false"
                     tools:ignore="UnusedAttribute"
-                    android:layout_marginTop="12dp"/>
+                    android:layout_marginTop="16dp"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
